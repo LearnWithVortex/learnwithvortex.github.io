@@ -78,31 +78,22 @@ function updateClock() {
 // Load games from JSON file
 async function loadGames() {
   try {
-    // This is a placeholder for the games data
-    // In a real application, you would fetch this from a server
-    games = [
-      { id: 1, name: "Space Invaders", category: "arcade", path: "games/space-invaders.html", logo: "assets/images/games/space-invaders.jpg", featured: true, rating: 4.5 },
-      { id: 2, name: "Pac-Man", category: "arcade", path: "games/pacman.html", logo: "assets/images/games/pacman.jpg", featured: true, rating: 4.8 },
-      { id: 3, name: "Tetris", category: "puzzle", path: "games/tetris.html", logo: "assets/images/games/tetris.jpg", featured: false, rating: 4.7 },
-      { id: 4, name: "Snake", category: "arcade", path: "games/snake.html", logo: "assets/images/games/snake.jpg", featured: false, rating: 4.2 },
-      { id: 5, name: "Chess", category: "strategy", path: "games/chess.html", logo: "assets/images/games/chess.jpg", featured: true, rating: 4.6 },
-      { id: 6, name: "Sudoku", category: "puzzle", path: "games/sudoku.html", logo: "assets/images/games/sudoku.jpg", featured: false, rating: 4.4 },
-      { id: 7, name: "2048", category: "puzzle", path: "games/2048.html", logo: "assets/images/games/2048.jpg", featured: false, rating: 4.3 },
-      { id: 8, name: "Racing", category: "action", path: "games/racing.html", logo: "assets/images/games/racing.jpg", featured: true, rating: 4.1 },
-      { id: 9, name: "Platformer", category: "action", path: "games/platformer.html", logo: "assets/images/games/platformer.jpg", featured: false, rating: 4.0 },
-      { id: 10, name: "Tower Defense", category: "strategy", path: "games/tower-defense.html", logo: "assets/images/games/tower-defense.jpg", featured: true, rating: 4.5 },
-      { id: 11, name: "Minesweeper", category: "puzzle", path: "games/minesweeper.html", logo: "assets/images/games/minesweeper.jpg", featured: false, rating: 4.2 },
-      { id: 12, name: "Breakout", category: "arcade", path: "games/breakout.html", logo: "assets/images/games/breakout.jpg", featured: false, rating: 4.0 }
-    ];
+    const response = await fetch('/assets/lists/gl.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    games = data;
 
     // Extract featured games for carousel
     featuredGames = games.filter(game => game.featured);
-    
+
     // Initialize the UI with smooth animations
     renderGames(games);
     renderRecentGames();
     setupCarousel();
-    
+
     // Add staggered animation to game cards
     setTimeout(() => {
       const gameCards = document.querySelectorAll('.game-card');
@@ -112,7 +103,7 @@ async function loadGames() {
         }, index * 50);
       });
     }, 300);
-    
+
   } catch (error) {
     console.error('Error loading games:', error);
   }
