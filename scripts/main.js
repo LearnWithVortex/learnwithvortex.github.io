@@ -16,6 +16,7 @@ const currentGameTitle = document.getElementById('current-game-title');
 const gameCategory = document.getElementById('game-category');
 const closeGame = document.getElementById('close-game');
 const favoriteGame = document.getElementById('favorite-game');
+const fullscreenGame = document.getElementById('fullscreen-game');
 const clearHistory = document.getElementById('clear-history');
 const resetFavorites = document.getElementById('reset-favorites');
 const toggleAnimations = document.getElementById('toggle-animations');
@@ -26,6 +27,7 @@ const carouselPrev = document.querySelector('.carousel-prev');
 const carouselNext = document.querySelector('.carousel-next');
 const navLinks = document.querySelectorAll('.nav-link');
 const viewBtns = document.querySelectorAll('.view-btn');
+const viewAllRecent = document.getElementById('view-all-recent');
 
 // Game data
 let games = [];
@@ -34,6 +36,7 @@ let currentGameIndex = 0;
 let currentCategory = 'all';
 let carouselIndex = 0;
 let featuredGames = [];
+let showAllRecent = false;
 
 // Initialize the application
 function init() {
@@ -266,6 +269,53 @@ function setupEventListeners() {
       }, 500);
     });
   });
+  
+  // Fullscreen game button
+  fullscreenGame.addEventListener('click', () => {
+    toggleFullscreen();
+  });
+  
+  // View all recent games
+  viewAllRecent.addEventListener('click', () => {
+    showAllRecent = !showAllRecent;
+    renderRecentGames();
+    
+    // Update the button text
+    viewAllRecent.textContent = showAllRecent ? 'Show Less' : 'View All';
+  });
+}
+
+// Toggle fullscreen mode for the game frame
+function toggleFullscreen() {
+  const gameContainer = document.querySelector('.game-container');
+  
+  if (!document.fullscreenElement) {
+    if (gameFrame.requestFullscreen) {
+      gameFrame.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else if (gameFrame.webkitRequestFullscreen) { /* Safari */
+      gameFrame.webkitRequestFullscreen();
+    } else if (gameFrame.msRequestFullscreen) { /* IE11 */
+      gameFrame.msRequestFullscreen();
+    }
+    
+    fullscreenGame.innerHTML = '<i class="fa-solid fa-compress"></i>';
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+    
+    fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
+  }
+  
+  // Add pulse animation
+  fullscreenGame.classList.add('pulse-once');
+  setTimeout(() => fullscreenGame.classList.remove('pulse-once'), 300);
 }
 
 // Apply saved settings
@@ -365,17 +415,24 @@ function renderGames(gamesList) {
   });
 }
 
-// Render recently played games
+// Render recently played games, limited to 3 unless "View All" is clicked
 function renderRecentGames() {
   recentlyPlayed.innerHTML = '';
   const recentGames = JSON.parse(localStorage.getItem('recentlyPlayed') || '[]');
   
   if (recentGames.length === 0) {
     recentlyPlayed.innerHTML = '<p class="empty-state">No recently played games</p>';
+    viewAllRecent.style.display = 'none';
     return;
   }
   
-  recentGames.forEach(gameId => {
+  // Show the view all button only if there are more than 3 games
+  viewAllRecent.style.display = recentGames.length > 3 ? 'block' : 'none';
+  
+  // Limit the number of games shown unless "View All" is clicked
+  const gamesToShow = showAllRecent ? recentGames : recentGames.slice(0, 3);
+  
+  gamesToShow.forEach(gameId => {
     const game = games.find(g => g.id === gameId);
     if (!game) return;
     
@@ -445,6 +502,9 @@ function playGame(game, index) {
     
     gameOverlay.classList.remove('preload');
     gameOverlay.classList.add('active');
+    
+    // Reset fullscreen button to default state
+    fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
     
     // Game rating animation
     const stars = document.querySelectorAll('.game-rating i');
@@ -577,6 +637,15 @@ function updateCarousel() {
     }
   });
 }
+
+// Listen for fullscreen change event to update button icon
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    fullscreenGame.innerHTML = '<i class="fa-solid fa-compress"></i>';
+  } else {
+    fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
+  }
+});
 
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);

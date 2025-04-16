@@ -76,7 +76,7 @@
       <section class="game-section" id="recent-section">
         <div class="section-header">
           <h2>Recently Played</h2>
-          <span class="view-all">View All</span>
+          <span class="view-all" id="view-all-recent">View All</span>
         </div>
         <div class="game-grid" id="recently-played">
           <!-- Recent games will be inserted here by JavaScript -->
@@ -114,8 +114,9 @@
             </div>
           </div>
           <div class="game-controls">
-            <button id="favorite-game" class="icon-btn"><i class="fa-regular fa-heart"></i></button>
-            <button id="close-game" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            <button id="fullscreen-game" class="icon-btn" title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i></button>
+            <button id="favorite-game" class="icon-btn" title="Add to Favorites"><i class="fa-regular fa-heart"></i></button>
+            <button id="close-game" class="icon-btn" title="Close Game"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
         <div class="game-frame-container">
