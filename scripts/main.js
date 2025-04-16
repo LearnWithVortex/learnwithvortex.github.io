@@ -1,4 +1,3 @@
-
 // DOM Elements
 const loadingScreen = document.querySelector('.loading-screen');
 const timeDisplay = document.getElementById('time');
@@ -16,7 +15,6 @@ const gameFrame = document.getElementById('game-frame');
 const currentGameTitle = document.getElementById('current-game-title');
 const gameCategory = document.getElementById('game-category');
 const closeGame = document.getElementById('close-game');
-const fullscreenGame = document.getElementById('fullscreen-game');
 const favoriteGame = document.getElementById('favorite-game');
 const clearHistory = document.getElementById('clear-history');
 const resetFavorites = document.getElementById('reset-favorites');
@@ -39,10 +37,13 @@ let featuredGames = [];
 
 // Initialize the application
 function init() {
-  // Simulate loading
+  // Simulate loading with a more dynamic animation
   setTimeout(() => {
-    loadingScreen.classList.add('hidden');
-  }, 1500);
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => {
+      loadingScreen.classList.add('hidden');
+    }, 500);
+  }, 1200);
 
   // Update time display
   updateClock();
@@ -56,6 +57,9 @@ function init() {
 
   // Apply settings
   applySettings();
+  
+  // Add page transition effect
+  document.body.classList.add('page-loaded');
 }
 
 // Update the clock display
@@ -91,10 +95,20 @@ async function loadGames() {
     // Extract featured games for carousel
     featuredGames = games.filter(game => game.featured);
     
-    // Initialize the UI
+    // Initialize the UI with smooth animations
     renderGames(games);
     renderRecentGames();
     setupCarousel();
+    
+    // Add staggered animation to game cards
+    setTimeout(() => {
+      const gameCards = document.querySelectorAll('.game-card');
+      gameCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('appear');
+        }, index * 50);
+      });
+    }, 300);
     
   } catch (error) {
     console.error('Error loading games:', error);
@@ -114,20 +128,28 @@ function setupEventListeners() {
   
   // Game overlay
   closeGame.addEventListener('click', () => {
-    gameOverlay.classList.remove('active');
-    gameFrame.src = '';
-  });
-  
-  fullscreenGame.addEventListener('click', () => {
-    if (gameFrame.requestFullscreen) {
-      gameFrame.requestFullscreen();
-    }
+    gameOverlay.classList.add('closing');
+    setTimeout(() => {
+      gameOverlay.classList.remove('active');
+      gameOverlay.classList.remove('closing');
+      gameFrame.src = '';
+    }, 300);
   });
   
   favoriteGame.addEventListener('click', () => {
     const currentGame = games[currentGameIndex];
     toggleFavorite(currentGame.id);
     updateFavoriteButton(currentGame.id);
+    
+    // Add heart animation
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.innerHTML = '<i class="fa-solid fa-heart"></i>';
+    document.body.appendChild(heart);
+    
+    setTimeout(() => {
+      document.body.removeChild(heart);
+    }, 1000);
   });
   
   // Search
@@ -162,6 +184,11 @@ function setupEventListeners() {
   // Category filters
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
+      // Skip if it's the Contact link
+      if (link.getAttribute('href') === 'form.html') {
+        return;
+      }
+      
       e.preventDefault();
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
@@ -207,15 +234,37 @@ function setupEventListeners() {
     renderGames(games);
   });
   
-  // Carousel controls
+  // Carousel controls with improved animation
   carouselPrev.addEventListener('click', () => {
-    carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
-    updateCarousel();
+    carouselContainer.classList.add('transition-left');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-left');
+    }, 300);
   });
   
   carouselNext.addEventListener('click', () => {
-    carouselIndex = (carouselIndex + 1) % featuredGames.length;
-    updateCarousel();
+    carouselContainer.classList.add('transition-right');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex + 1) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-right');
+    }, 300);
+  });
+  
+  // Add page transition for navigation links
+  document.querySelectorAll('a[href="form.html"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      
+      document.body.classList.add('page-transition');
+      
+      setTimeout(() => {
+        window.location.href = href;
+      }, 500);
+    });
   });
 }
 
@@ -247,13 +296,14 @@ function saveSettings() {
   applySettings();
 }
 
-// Render all games in the game list
+// Render all games in the game list with improved animation
 function renderGames(gamesList) {
   gameList.innerHTML = '';
   
   gamesList.forEach((game, index) => {
     const gameCard = document.createElement('div');
     gameCard.className = 'game-card';
+    gameCard.style.animationDelay = `${index * 0.05}s`;
     
     const isFavorite = favorites.includes(game.id);
     
@@ -277,10 +327,22 @@ function renderGames(gamesList) {
       </div>
     `;
     
-    // Game click event
+    // Game click event with ripple effect
     gameCard.addEventListener('click', e => {
       if (!e.target.closest('.favorite-btn')) {
-        playGame(game, index);
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        const rect = gameCard.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+        gameCard.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+          playGame(game, index);
+        }, 300);
       }
     });
     
@@ -369,14 +431,35 @@ function renderRecentGames() {
   });
 }
 
-// Play a game
+// Play a game with improved transition
 function playGame(game, index) {
   currentGameIndex = index;
-  gameFrame.src = game.path;
-  currentGameTitle.textContent = game.name;
-  gameCategory.textContent = game.category;
-  updateFavoriteButton(game.id);
-  gameOverlay.classList.add('active');
+  
+  // Preload animation
+  gameOverlay.classList.add('preload');
+  setTimeout(() => {
+    gameFrame.src = game.path;
+    currentGameTitle.textContent = game.name;
+    gameCategory.textContent = game.category;
+    updateFavoriteButton(game.id);
+    
+    gameOverlay.classList.remove('preload');
+    gameOverlay.classList.add('active');
+    
+    // Game rating animation
+    const stars = document.querySelectorAll('.game-rating i');
+    stars.forEach((star, i) => {
+      setTimeout(() => {
+        if (i < Math.floor(game.rating)) {
+          star.className = 'fa-solid fa-star';
+        } else if (i < game.rating) {
+          star.className = 'fa-solid fa-star-half-stroke';
+        } else {
+          star.className = 'fa-regular fa-star';
+        }
+      }, i * 100);
+    });
+  }, 300);
   
   // Save to recently played
   saveRecentGame(game.id);
@@ -419,12 +502,18 @@ function saveRecentGame(gameId) {
   localStorage.setItem('recentlyPlayed', JSON.stringify(recentGames));
 }
 
-// Toggle active state on action buttons
+// Toggle active state on action buttons with animation
 function toggleActiveButton(button) {
-  document.querySelectorAll('.action-btn').forEach(btn => {
-    btn.classList.remove('active');
+  const allButtons = document.querySelectorAll('.action-btn');
+  allButtons.forEach(btn => {
+    if (btn === button) {
+      btn.classList.add('active');
+      btn.classList.add('pulse-once');
+      setTimeout(() => btn.classList.remove('pulse-once'), 500);
+    } else {
+      btn.classList.remove('active');
+    }
   });
-  button.classList.add('active');
 }
 
 // Set up the featured games carousel
@@ -473,7 +562,7 @@ function setupCarousel() {
   updateCarousel();
 }
 
-// Update the carousel position and active dot
+// Update the carousel position and active dot with improved animation
 function updateCarousel() {
   carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
   
@@ -481,6 +570,8 @@ function updateCarousel() {
   dots.forEach((dot, index) => {
     if (index === carouselIndex) {
       dot.classList.add('active');
+      dot.classList.add('pulse-once');
+      setTimeout(() => dot.classList.remove('pulse-once'), 500);
     } else {
       dot.classList.remove('active');
     }
