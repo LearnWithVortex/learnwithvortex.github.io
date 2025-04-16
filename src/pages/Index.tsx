@@ -1,34 +1,56 @@
 
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Index = () => {
+  const [showIframe, setShowIframe] = useState(false);
+  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4">
-      <h1 className="text-5xl font-bold mb-6 text-center" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-        VORTEX GAMES
-      </h1>
-      <p className="text-xl text-gray-300 mb-8 text-center max-w-2xl">
-        Welcome to the next generation gaming platform. Access your games through our redesigned interface.
-      </p>
-      
-      <div className="space-y-4 w-full max-w-md">
-        <Button asChild className="w-full h-12 bg-indigo-600 hover:bg-indigo-700">
-          <a href="/index.html" className="text-lg">
-            Launch Classic Interface
-          </a>
-        </Button>
-        
-        <Button asChild variant="outline" className="w-full h-12 border-indigo-400 text-indigo-400 hover:bg-indigo-950">
-          <Link to="/react-version" className="text-lg">
-            Try New React Version (Coming Soon)
-          </Link>
-        </Button>
+    <div className="min-h-screen bg-gray-100 text-gray-900">
+      <div className={`container ${showIframe ? 'hidden' : 'block'}`} id="errorPage">
+        <div className="min-h-screen flex flex-col items-center justify-center px-4">
+          <h1 className="text-5xl font-bold mb-6" style={{ fontFamily: 'Orbitron, sans-serif' }}>404</h1>
+          <p className="text-xl text-gray-600 mb-8">
+            <strong>There isn't a GitHub Pages site here.</strong>
+          </p>
+          
+          <p className="text-base text-gray-500 max-w-lg text-center mb-10">
+            If you're trying to publish one, 
+            read the full documentation to learn how to set up 
+            <strong> GitHub Pages</strong> for your repository, organization, or user account.
+          </p>
+          
+          <div className="space-y-4 w-full max-w-md flex flex-col items-center">
+            <button 
+              onClick={() => setShowIframe(true)}
+              className="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+            >
+              Launch Games
+            </button>
+            
+            <div className="text-sm text-gray-500 mt-8 flex gap-4">
+              <a href="#" className="hover:text-indigo-600">GitHub Status</a>
+              <span>—</span>
+              <a href="#" className="hover:text-indigo-600">@githubstatus</a>
+            </div>
+          </div>
+        </div>
       </div>
       
-      <div className="mt-12 text-sm text-gray-400">
-        © 2025 Vortex - Enhanced with Lovable AI
-      </div>
+      {showIframe && (
+        <div className="fixed inset-0 bg-white z-10">
+          <iframe 
+            src="/index.html" 
+            className="w-full h-full border-none"
+            title="Games"
+          />
+          <button 
+            onClick={() => setShowIframe(false)}
+            className="absolute top-4 right-4 bg-gray-800 text-white p-2 rounded-full z-20"
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 };
