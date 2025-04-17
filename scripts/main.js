@@ -29,6 +29,11 @@ const carouselNext = document.querySelector('.carousel-next');
 const navLinks = document.querySelectorAll('.nav-link');
 const viewBtns = document.querySelectorAll('.view-btn');
 const viewAllRecent = document.getElementById('view-all-recent');
+const loadGames = document.getElementById('loadGames');
+const errorPage = document.getElementById('errorPage');
+const iframeContainer = document.getElementById('iframeContainer');
+const gameIframe = document.getElementById('gameIframe');
+const closeFrame = document.getElementById('closeFrame');
 
 // Game data
 let games = [];
@@ -274,6 +279,21 @@ function setupEventListeners() {
     
     // Update the button text
     viewAllRecent.textContent = showAllRecent ? 'Show Less' : 'View All';
+  });
+  
+  // Load games iframe
+  loadGames.addEventListener('click', () => {
+    gameIframe.src = 'g.html';  // Set the iframe source
+    iframeContainer.classList.add('show');
+    errorPage.style.display = 'none';
+  });
+  
+  closeFrame.addEventListener('click', () => {
+    iframeContainer.classList.remove('show');
+    errorPage.style.display = 'block';
+    setTimeout(() => {
+      gameIframe.src = '';
+    }, 500);
   });
 }
 
@@ -603,7 +623,6 @@ function toggleActiveButton(button) {
   });
 }
 
-
 function setupCarousel() {
   carouselContainer.innerHTML = '';
   carouselDots.innerHTML = '';
@@ -673,7 +692,6 @@ function setupCarousel() {
     carouselDots.appendChild(dot);
   });
 }
-
 
 // Update the carousel position and active dot with improved animation
 function updateCarousel() {
