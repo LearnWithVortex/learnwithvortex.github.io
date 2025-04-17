@@ -63,6 +63,61 @@ body.page-loaded {
   to { opacity: 1; }
 }
 
+/* Toggle Disc Styles */
+.toggle-disc-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-disc {
+  width: 50px;
+  height: 25px;
+  background: var(--bg-secondary);
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.toggle-disc::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.toggle-disc.active {
+  background: var(--accent-tertiary);
+}
+
+.toggle-disc.active::after {
+  transform: translateX(25px);
+  background: var(--accent-secondary);
+}
+
+/* Glowing Effect */
+.toggle-disc.active {
+  box-shadow: 0 0 10px var(--accent-tertiary), 0 0 20px var(--accent-tertiary);
+}
+
+.toggle-disc:hover {
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+
+/* Optional Text for the Toggle */
+.toggle-label {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-left: 10px;
+}
+
+
 /* Loading Screen */
 .loading-screen {
   position: fixed;
