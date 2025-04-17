@@ -383,15 +383,15 @@ only screen and (min-resolution: 2dppx) {
 
 /* Thumbnail size classes */
 .game-grid[data-size="small"] .game-card {
-  max-width: 160px;
+  width: 160px;
 }
 
 .game-grid[data-size="medium"] .game-card {
-  max-width: 200px;
+  width: 200px;
 }
 
 .game-grid[data-size="large"] .game-card {
-  max-width: 240px;
+  width: 240px;
 }
 
 /* Game card animations */
