@@ -494,7 +494,6 @@ function renderRecentGames() {
         alert('Popup blocked! Please allow popups for this site.');
       }
     }
-    }
     
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
