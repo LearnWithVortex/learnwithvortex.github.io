@@ -568,7 +568,6 @@ function toggleActiveButton(button) {
 }
 
 
-
 function setupCarousel() {
   carouselContainer.innerHTML = '';
   carouselDots.innerHTML = '';
@@ -579,7 +578,7 @@ function setupCarousel() {
     const isLong = fullDesc.length > maxLength;
     const shortDesc = fullDesc.slice(0, maxLength) + (isLong ? '...' : '');
 
-    // Create elements
+    // Create carousel item
     const carouselItem = document.createElement('div');
     carouselItem.className = 'carousel-item';
 
@@ -604,10 +603,11 @@ function setupCarousel() {
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
 
+    // Add elements to content
     contentDiv.appendChild(title);
     contentDiv.appendChild(desc);
 
-    // Only add toggle button if description is long
+    // Add Show More/Less button if needed
     if (isLong) {
       const toggleBtn = document.createElement('button');
       toggleBtn.className = 'toggle-desc';
@@ -622,30 +622,13 @@ function setupCarousel() {
 
     contentDiv.appendChild(playBtn);
 
-    // Assemble item
+    // Add image and content to carousel item
     carouselItem.appendChild(img);
     carouselItem.appendChild(contentDiv);
     carouselContainer.appendChild(carouselItem);
 
-    // Create and append dot
-    const dot = document.createElement('span');
-    dot.className = 'carousel-dot';
-    if (index === 0) dot.classList.add('active');
-    carouselDots.appendChild(dot);
-  });
-}
-
-// Play button event
-    const playBtn = carouselItem.querySelector('.carousel-btn');
-    playBtn.addEventListener('click', () => {
-      const gameIndex = games.findIndex(g => g.id === game.id);
-      playGame(game, gameIndex);
-    });
-    
-    carouselContainer.appendChild(carouselItem);
-    
-    // Create carousel dot
-    const dot = document.createElement('div');
+    // Create dot with click listener
+    const dot = document.createElement('div'); // using div for dot
     dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
     dot.addEventListener('click', () => {
       carouselIndex = index;
@@ -653,15 +636,8 @@ function setupCarousel() {
     });
     carouselDots.appendChild(dot);
   });
-  
-  // Start carousel auto-rotation
-  setInterval(() => {
-    carouselIndex = (carouselIndex + 1) % featuredGames.length;
-    updateCarousel();
-  }, 5000);
-  
-  updateCarousel();
 }
+
 
 // Update the carousel position and active dot with improved animation
 function updateCarousel() {
