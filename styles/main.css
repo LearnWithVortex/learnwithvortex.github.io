@@ -746,13 +746,25 @@ main {
   border-radius: 8px;
 }
 
+.game-grid[data-size="small"] .game-card {
+  max-width: 160px;
+}
+
+.game-grid[data-size="medium"] .game-card {
+  max-width: 200px;
+}
+
+.game-grid[data-size="large"] .game-card {
+  max-width: 240px;
+}
+
 /* Main Game Card */
 .game-card {
   background: var(--bg-secondary);
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  transition: all var(--transition-medium), transform var(--transition-medium);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -765,10 +777,11 @@ main {
 
 .game-card:hover .game-img {
   transform: scale(1.08);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.game-card:hover .play-btn {
-  transform: scale(1.1) rotate(360deg);
+.game-img {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .play-btn {
