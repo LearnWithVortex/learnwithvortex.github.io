@@ -567,23 +567,56 @@ function toggleActiveButton(button) {
   });
 }
 
-// Set up the featured games carousel
 function setupCarousel() {
   carouselContainer.innerHTML = '';
   carouselDots.innerHTML = '';
-  
+
   featuredGames.forEach((game, index) => {
+    const maxLength = 120;
+    const fullDesc = game.discription || `Experience the excitement of ${game.name}. One of our most popular ${game.category} games!`;
+    const isLong = fullDesc.length > maxLength;
+    const shortDesc = fullDesc.slice(0, maxLength) + (isLong ? '...' : '');
+
     // Create carousel item
     const carouselItem = document.createElement('div');
     carouselItem.className = 'carousel-item';
+
+    // Set up description HTML
+    let descHTML = `<p class="carousel-desc" data-full="${fullDesc}" data-short="${shortDesc}">${shortDesc}</p>`;
+    if (isLong) {
+      descHTML += `<button class="toggle-desc">Show More</button>`;
+    }
+
     carouselItem.innerHTML = `
       <img src="${game.logo}" alt="${game.name}">
       <div class="carousel-content">
         <h2 class="carousel-title">${game.name}</h2>
-        <p class="carousel-desc">Experience the excitement of ${game.name}. One of our most popular ${game.category} games!</p>
+        ${descHTML}
         <button class="carousel-btn">Play Now</button>
       </div>
     `;
+
+    carouselContainer.appendChild(carouselItem);
+
+    // Create and append carousel dot
+    const dot = document.createElement('span');
+    dot.className = 'carousel-dot';
+    if (index === 0) dot.classList.add('active');
+    carouselDots.appendChild(dot);
+
+    // Toggle description button logic
+    if (isLong) {
+      const toggleBtn = carouselItem.querySelector('.toggle-desc');
+      const descPara = carouselItem.querySelector('.carousel-desc');
+      toggleBtn.addEventListener('click', () => {
+        const expanded = toggleBtn.textContent === 'Show Less';
+        descPara.textContent = expanded ? descPara.dataset.short : descPara.dataset.full;
+        toggleBtn.textContent = expanded ? 'Show More' : 'Show Less';
+      });
+    }
+  });
+}
+
     
     // Play button event
     const playBtn = carouselItem.querySelector('.carousel-btn');
