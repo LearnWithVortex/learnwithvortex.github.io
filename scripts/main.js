@@ -14,6 +14,7 @@ const gameOverlay = document.getElementById('game-overlay');
 const gameFrame = document.getElementById('game-frame');
 const currentGameTitle = document.getElementById('current-game-title');
 const gameCategory = document.getElementById('game-category');
+const gamePopout = document.getElementById('popout-game');
 const closeGame = document.getElementById('close-game');
 const favoriteGame = document.getElementById('favorite-game');
 const fullscreenGame = document.getElementById('fullscreen-game');
@@ -459,6 +460,41 @@ function renderRecentGames() {
         playGame(game, index);
       }
     });
+
+    gamePopout.addEventListener('click', e => {
+      const newTab = window.open('about:blank', '_blank');
+      if (newTab) {
+        newTab.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Vortex - Game Popout</title>
+            <style>
+              html, body, iframe {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                border: none;
+              }
+              iframe {
+                display: block;
+                height: 100%;
+                width: 100%;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
+          </body>
+          </html>
+        `);
+        newTab.document.close();
+      } else {
+        alert('Popup blocked! Please allow popups for this site.');
+      }
+    }
+    }
     
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
