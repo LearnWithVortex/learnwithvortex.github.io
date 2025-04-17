@@ -567,6 +567,8 @@ function toggleActiveButton(button) {
   });
 }
 
+
+
 function setupCarousel() {
   carouselContainer.innerHTML = '';
   carouselDots.innerHTML = '';
@@ -577,48 +579,63 @@ function setupCarousel() {
     const isLong = fullDesc.length > maxLength;
     const shortDesc = fullDesc.slice(0, maxLength) + (isLong ? '...' : '');
 
-    // Create carousel item
+    // Create elements
     const carouselItem = document.createElement('div');
     carouselItem.className = 'carousel-item';
 
-    // Set up description HTML
-    let descHTML = `<p class="carousel-desc" data-full="${fullDesc}" data-short="${shortDesc}">${shortDesc}</p>`;
+    const img = document.createElement('img');
+    img.src = game.logo;
+    img.alt = game.name;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'carousel-content';
+
+    const title = document.createElement('h2');
+    title.className = 'carousel-title';
+    title.textContent = game.name;
+
+    const desc = document.createElement('p');
+    desc.className = 'carousel-desc';
+    desc.textContent = shortDesc;
+    desc.dataset.full = fullDesc;
+    desc.dataset.short = shortDesc;
+
+    const playBtn = document.createElement('button');
+    playBtn.className = 'carousel-btn';
+    playBtn.textContent = 'Play Now';
+
+    contentDiv.appendChild(title);
+    contentDiv.appendChild(desc);
+
+    // Only add toggle button if description is long
     if (isLong) {
-      descHTML += `<button class="toggle-desc">Show More</button>`;
+      const toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-desc';
+      toggleBtn.textContent = 'Show More';
+      toggleBtn.addEventListener('click', () => {
+        const expanded = toggleBtn.textContent === 'Show Less';
+        desc.textContent = expanded ? desc.dataset.short : desc.dataset.full;
+        toggleBtn.textContent = expanded ? 'Show More' : 'Show Less';
+      });
+      contentDiv.appendChild(toggleBtn);
     }
 
-    carouselItem.innerHTML = `
-      <img src="${game.logo}" alt="${game.name}">
-      <div class="carousel-content">
-        <h2 class="carousel-title">${game.name}</h2>
-        ${descHTML}
-        <button class="carousel-btn">Play Now</button>
-      </div>
-    `;
+    contentDiv.appendChild(playBtn);
 
+    // Assemble item
+    carouselItem.appendChild(img);
+    carouselItem.appendChild(contentDiv);
     carouselContainer.appendChild(carouselItem);
 
-    // Create and append carousel dot
+    // Create and append dot
     const dot = document.createElement('span');
     dot.className = 'carousel-dot';
     if (index === 0) dot.classList.add('active');
     carouselDots.appendChild(dot);
-
-    // Toggle description button logic
-    if (isLong) {
-      const toggleBtn = carouselItem.querySelector('.toggle-desc');
-      const descPara = carouselItem.querySelector('.carousel-desc');
-      toggleBtn.addEventListener('click', () => {
-        const expanded = toggleBtn.textContent === 'Show Less';
-        descPara.textContent = expanded ? descPara.dataset.short : descPara.dataset.full;
-        toggleBtn.textContent = expanded ? 'Show More' : 'Show Less';
-      });
-    }
   });
 }
 
-    
-    // Play button event
+// Play button event
     const playBtn = carouselItem.querySelector('.carousel-btn');
     playBtn.addEventListener('click', () => {
       const gameIndex = games.findIndex(g => g.id === game.id);
