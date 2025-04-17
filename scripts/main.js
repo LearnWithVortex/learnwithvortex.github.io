@@ -340,10 +340,12 @@ function applySettings() {
     document.body.classList.toggle('no-animations', !settings.animations);
   }
   
-  // Thumbnail size
+  // Thumbnail size - Update this section
   if (settings.thumbnailSize) {
     thumbnailSize.value = settings.thumbnailSize;
-    gameList.setAttribute('data-size', settings.thumbnailSize);
+    if (gameList) {
+      gameList.setAttribute('data-size', settings.thumbnailSize);
+    }
   }
 }
 
