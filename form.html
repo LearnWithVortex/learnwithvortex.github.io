@@ -78,12 +78,14 @@
       resize: vertical;
     }
 
-    .form-group .input-icon {
-      position: absolute;
-      right: 12px;
-      top: 40px;
-      color: var(--text-tertiary);
-    }
+.form-group .input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
 
     .submit-btn {
       background: var(--accent-primary);
@@ -158,7 +160,7 @@
         </div>
         <ul class="nav-menu">
           <li><a href="g.html" class="nav-link">Home</a></li>
-          <li><a href="form.html" class="nav-link active">Contact</a></li>
+          <li><a href="form.html" class="nav-link active">Forms</a></li>
         </ul>
       </div>
       <div class="nav-right">
@@ -167,7 +169,6 @@
           <i class="fa-solid fa-search search-icon"></i>
           <input type="text" id="search" placeholder="Search games...">
         </div>
-        <button id="settings-btn" class="icon-btn"><i class="fa-solid fa-gear"></i></button>
       </div>
     </nav>
   </header>
@@ -282,7 +283,7 @@
           contactForm.style.display = 'none';
           formSuccess.classList.add('active');
         } else {
-          alert('Failed to send message.');
+         // alert('Failed to send message.');
           console.error('Webhook error:', await res.text());
         }
       } catch (error) {
