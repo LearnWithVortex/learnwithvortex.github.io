@@ -462,38 +462,39 @@ function renderRecentGames() {
     });
 
     gamePopout.addEventListener('click', e => {
-      const newTab = window.open('about:blank', '_blank');
-      if (newTab) {
-        newTab.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Vortex - Game Popout</title>
-            <style>
-              html, body, iframe {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                width: 100%;
-                border: none;
-              }
-              iframe {
-                display: block;
-                height: 100%;
-                width: 100%;
-              }
-            </style>
-          </head>
-          <body>
-            <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
-          </body>
-          </html>
-        `);
-        newTab.document.close();
-      } else {
-        alert('Popup blocked! Please allow popups for this site.');
-      }
-    }
+  const newTab = window.open('about:blank', '_blank');
+  if (newTab) {
+    newTab.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Vortex - Game Popout</title>
+        <style>
+          html, body, iframe {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            border: none;
+          }
+          iframe {
+            display: block;
+            height: 100%;
+            width: 100%;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
+      </body>
+      </html>
+    `);
+    newTab.document.close();
+  } else {
+    alert('Popup blocked! Please allow popups for this site.');
+  }
+});
+
     
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
