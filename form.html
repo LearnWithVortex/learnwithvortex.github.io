@@ -14,11 +14,12 @@
     .input-icon {
       position: absolute;
       right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 1rem;
       pointer-events: none;
       color: var(--text-tertiary);
-      top: 50%;
-      transform: translateY(-50%);
+      z-index: 10;
     }
 
     .form-container {
@@ -76,6 +77,7 @@
       box-sizing: border-box;
       appearance: none;
       line-height: 1.5rem;
+      padding-right: 2.5rem;
     }
 
     .form-group input:focus,
