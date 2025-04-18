@@ -38,6 +38,7 @@ let currentCategory = 'all';
 let carouselIndex = 0;
 let featuredGames = [];
 let showAllRecent = false;
+let currentView = 'all';
 
 // Initialize the application
 function init() {
@@ -166,8 +167,8 @@ function setupEventListeners() {
   // Favorites button
   favoritesBtn.addEventListener('click', () => {
     toggleActiveButton(favoritesBtn);
-    const favoriteGames = games.filter(game => favorites.includes(game.id));
-    renderGames(favoriteGames);
+    currentView = 'favorites';
+    renderFavoriteGames();
   });
   
   // Recent games button
@@ -393,12 +394,14 @@ function renderGames(gamesList) {
       e.stopPropagation();
       toggleFavorite(game.id);
       
-      if (favorites.includes(game.id)) {
-        favoriteBtn.classList.add('active');
-        favoriteBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
-      } else {
-        favoriteBtn.classList.remove('active');
-        favoriteBtn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      if (currentView !== 'favorites') {
+        if (favorites.includes(game.id)) {
+          favoriteBtn.classList.add('active');
+          favoriteBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+        } else {
+          favoriteBtn.classList.remove('active');
+          favoriteBtn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+        }
       }
     });
     
@@ -562,6 +565,11 @@ function toggleFavorite(gameId) {
   }
   
   localStorage.setItem('favorites', JSON.stringify(favorites));
+  
+  // Re-render the current view if we're in favorites
+  if (currentView === 'favorites') {
+    renderFavoriteGames();
+  }
 }
 
 // Update the favorite button in the game overlay
@@ -601,7 +609,6 @@ function toggleActiveButton(button) {
     }
   });
 }
-
 
 function setupCarousel() {
   carouselContainer.innerHTML = '';
@@ -679,7 +686,6 @@ if (isLong) {
   });
 }
 
-
 // Update the carousel position and active dot with improved animation
 function updateCarousel() {
   carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
@@ -694,6 +700,12 @@ function updateCarousel() {
       dot.classList.remove('active');
     }
   });
+}
+
+// New function to render favorite games
+function renderFavoriteGames() {
+  const favoriteGames = games.filter(game => favorites.includes(game.id));
+  renderGames(favoriteGames);
 }
 
 // Listen for fullscreen change event to update button icon
