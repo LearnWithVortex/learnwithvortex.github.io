@@ -1,6 +1,7 @@
 [
 {
 "name": "Yohoho.io",
+"id": "yohoho",
 "discription": "Play as a pirate on various themed islands! Open chests and collect doubloons to get bigger. Kill other players to collect their coins, get bigger again! Use your special dash ability to boost your speed and overcome your opponents.",
 "category": "Shooter",
 "path": "/g/yohoho/",
@@ -10,6 +11,7 @@
 },
 {
     "name": "Poly Track",
+    "id": "polytrack",
     "discription": "A fast-paced, low-poly driving game with loops, jumps, and high-speed action, inspired by TrackMania",
     "category": "Racing",
     "path": "/g/pt/",
@@ -19,6 +21,7 @@
     },
     {
         "name": "Geometry Dash",
+        "id": "geodash",
         "discription": "Jump and fly your way through danger in this rhythm-based action platformer! Prepare for a near impossible challenge in the world of Geometry Dash. Push your skills to the limit as you jump, fly and flip your way through dangerous passages and spiky obstacles.",
         "category": "Action",
         "path": "/g/geodash/",
@@ -28,6 +31,7 @@
         },
         {
             "name": "Drive Mad",
+            "id": "drivemad",
             "discription": "Drive Mad is an arcade driving game with challenging obstacles and stunts. Navigate tricky courses with precise control for a thrilling experience.",
             "category": "Action",
             "path": "/g/drivemad/",
