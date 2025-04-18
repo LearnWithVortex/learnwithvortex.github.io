@@ -40,6 +40,9 @@ let featuredGames = [];
 let showAllRecent = false;
 let currentView = 'all';
 
+// Add new variable for carousel interval
+let carouselInterval = null;
+
 // Initialize the application
 function init() {
   // Simulate loading with a more dynamic animation
@@ -65,6 +68,9 @@ function init() {
   
   // Add page transition effect
   document.body.classList.add('page-loaded');
+
+  // Set up carousel controls
+  setupCarouselControls();
 }
 
 // Update the clock display
@@ -684,6 +690,27 @@ if (isLong) {
     });
     carouselDots.appendChild(dot);
   });
+
+  // Start auto-rotation
+  startCarouselAutoRotation();
+}
+
+// Add new function for carousel auto-rotation
+function startCarouselAutoRotation() {
+  // Clear any existing interval
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+  }
+
+  // Rotate every 5 seconds
+  carouselInterval = setInterval(() => {
+    carouselContainer.classList.add('transition-right');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex + 1) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-right');
+    }, 300);
+  }, 5000);
 }
 
 // Update the carousel position and active dot with improved animation
@@ -716,6 +743,69 @@ document.addEventListener('fullscreenchange', () => {
     fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
   }
 });
+
+// Add new function for carousel auto-rotation
+function startCarouselAutoRotation() {
+  // Clear any existing interval
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+  }
+
+  // Rotate every 5 seconds
+  carouselInterval = setInterval(() => {
+    carouselContainer.classList.add('transition-right');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex + 1) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-right');
+    }, 300);
+  }, 5000);
+}
+
+// Update event listeners in setupCarousel to pause on interaction
+function setupCarouselControls() {
+  carouselPrev.addEventListener('click', () => {
+    // Clear interval on manual navigation
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
+    }
+    carouselContainer.classList.add('transition-left');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-left');
+      // Restart auto-rotation after manual navigation
+      startCarouselAutoRotation();
+    }, 300);
+  });
+
+  carouselNext.addEventListener('click', () => {
+    // Clear interval on manual navigation
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
+    }
+    carouselContainer.classList.add('transition-right');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex + 1) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-right');
+      // Restart auto-rotation after manual navigation
+      startCarouselAutoRotation();
+    }, 300);
+  });
+
+  // Add pause on hover
+  carouselContainer.addEventListener('mouseenter', () => {
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
+    }
+  });
+
+  // Resume on mouse leave
+  carouselContainer.addEventListener('mouseleave', () => {
+    startCarouselAutoRotation();
+  });
+}
 
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
