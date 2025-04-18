@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +11,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    .input-icon {
+      position: absolute;
+      right: 14px;
+      font-size: 1rem;
+      pointer-events: none;
+      color: var(--text-tertiary);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
     .form-container {
       max-width: 600px;
       margin: 2rem auto;
@@ -42,6 +51,7 @@
     .form-group {
       margin-bottom: 1.5rem;
       position: relative;
+      display: block;
     }
 
     .form-group label {
@@ -79,16 +89,6 @@
     .form-group textarea {
       min-height: 120px;
       resize: vertical;
-    }
-
-    .form-group .input-icon {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-tertiary);
-      pointer-events: none;
-      font-size: 1rem;
     }
 
     .submit-btn {
@@ -169,10 +169,6 @@
       </div>
       <div class="nav-right">
         <div class="time-display" id="time">--:--</div>
-        <div class="search-container">
-          <i class="fa-solid fa-search search-icon"></i>
-          <input type="text" id="search" placeholder="Search games..." />
-        </div>
       </div>
     </nav>
   </header>

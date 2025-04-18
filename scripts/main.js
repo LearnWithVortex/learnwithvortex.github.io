@@ -271,7 +271,6 @@ function setupEventListeners() {
   viewAllRecent.addEventListener('click', () => {
     showAllRecent = !showAllRecent;
     renderRecentGames();
-    
     // Update the button text
     viewAllRecent.textContent = showAllRecent ? 'Show Less' : 'View All';
   });
@@ -629,36 +628,41 @@ function setupCarousel() {
     title.className = 'carousel-title';
     title.textContent = game.name;
 
+  
     const desc = document.createElement('p');
-    desc.className = 'carousel-desc';
-    desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn">Show More</span>' : ''}`;
-    desc.dataset.full = fullDesc;
-    desc.dataset.short = shortDesc;
+desc.className = 'carousel-desc';
+desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
+desc.dataset.full = fullDesc;
+desc.dataset.short = shortDesc;
 
-    // Add show more/less functionality
-    if (isLong) {
-      const showMoreBtn = desc.querySelector('.show-more-btn');
-      showMoreBtn.addEventListener('click', () => {
-        const expanded = showMoreBtn.textContent === 'Show Less';
-        desc.innerHTML = (expanded ? desc.dataset.short : desc.dataset.full) + 
-                         `<span class="show-more-btn">${expanded ? 'Show More' : 'Show Less'}</span>`;
-      });
+if (isLong) {
+  desc.addEventListener('click', (e) => {
+    if (e.target.classList.contains('show-more-btn')) {
+      const isExpanded = e.target.textContent.trim() === 'Show Less';
+
+      // Replace with the correct content
+      desc.innerHTML =
+        (isExpanded ? desc.dataset.short : desc.dataset.full) +
+        '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
+        (isExpanded ? 'Show More' : 'Show Less') +
+        '</span>';
     }
+  });
+}
+
+    
 
     contentDiv.appendChild(title);
     contentDiv.appendChild(desc);
-
-    // Add Show More/Less button if needed
     
-
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
 
-    // Add elements to content
-    
+    playBtn.addEventListener('click', () => {
+    // todo
+    });
 
-    // Add image and content to carousel item
     contentDiv.appendChild(playBtn);
     carouselItem.appendChild(img);
     carouselItem.appendChild(contentDiv);

@@ -480,7 +480,7 @@ main {
 }
 
 .carousel-desc {
-  color: var(--text-secondary);
+  color: lightblue;
   margin-bottom: 1rem;
   max-width: 60%;
 }
@@ -763,9 +763,27 @@ main {
   z-index: 1;
 }
 
-.game-card:hover .game-img {
-  transform: scale(1.08);
+.game-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
 }
+
+.game-img {
+  width: 200px;           /* Smaller fixed size */
+  height: 200px;          /* Fixed height to make it square */
+  object-fit: cover;      /* Ensures the image covers the container properly */
+  transition: transform 0.3s ease-in-out;
+}
+
+.game-card:hover .game-img {
+  transform: scale(1.08); /* Slight scale effect on hover */
+  width: 200px;           /* Ensures the width stays fixed */
+  height: 200px;          /* Keeps the height fixed */
+}
+
 
 .game-card:hover .play-btn {
   transform: scale(1.1) rotate(360deg);
