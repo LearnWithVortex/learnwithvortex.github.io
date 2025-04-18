@@ -462,17 +462,55 @@ function renderRecentGames() {
         playGame(game, index);
       }
     });
+
+    gamePopout.addEventListener('click', e => {
+  const newTab = window.open('about:blank', '_blank');
+  if (newTab) {
+    newTab.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Vortex - Game Popout</title>
+        <style>
+          html, body, iframe {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            border: none;
+          }
+          iframe {
+            display: block;
+            height: 100%;
+            width: 100%;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
+      </body>
+      </html>
+    `);
+    newTab.document.close();
+  } else {
+    alert('Popup blocked! Please allow popups for this site.');
+  }
+});
+
     
-    // Favorite button click with immediate UI update
+    // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
     favoriteBtn.addEventListener('click', e => {
       e.stopPropagation();
       toggleFavorite(game.id);
       
-      // Always update the heart icon state immediately
-      const isFavoriteNow = favorites.includes(game.id);
-      favoriteBtn.classList.toggle('active', isFavoriteNow);
-      favoriteBtn.innerHTML = `<i class="fa-${isFavoriteNow ? 'solid' : 'regular'} fa-heart"></i>`;
+      if (favorites.includes(game.id)) {
+        favoriteBtn.classList.add('active');
+        favoriteBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+      } else {
+        favoriteBtn.classList.remove('active');
+        favoriteBtn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      }
     });
     
     recentlyPlayed.appendChild(gameCard);
@@ -676,40 +714,6 @@ document.addEventListener('fullscreenchange', () => {
     fullscreenGame.innerHTML = '<i class="fa-solid fa-compress"></i>';
   } else {
     fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
-  }
-});
-
-gamePopout.addEventListener('click', e => {
-  const newTab = window.open('about:blank', '_blank');
-  if (newTab) {
-    newTab.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Vortex - Game Popout</title>
-        <style>
-          html, body, iframe {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            border: none;
-          }
-          iframe {
-            display: block;
-            height: 100%;
-            width: 100%;
-          }
-        </style>
-      </head>
-      <body>
-        <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
-      </body>
-      </html>
-    `);
-    newTab.document.close();
-  } else {
-    alert('Popup blocked! Please allow popups for this site.');
   }
 });
 
