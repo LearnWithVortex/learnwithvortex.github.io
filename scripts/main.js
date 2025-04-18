@@ -631,34 +631,35 @@ function setupCarousel() {
 
     const desc = document.createElement('p');
     desc.className = 'carousel-desc';
-    desc.textContent = shortDesc;
+    desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn">Show More</span>' : ''}`;
     desc.dataset.full = fullDesc;
     desc.dataset.short = shortDesc;
+
+    // Add show more/less functionality
+    if (isLong) {
+      const showMoreBtn = desc.querySelector('.show-more-btn');
+      showMoreBtn.addEventListener('click', () => {
+        const expanded = showMoreBtn.textContent === 'Show Less';
+        desc.innerHTML = (expanded ? desc.dataset.short : desc.dataset.full) + 
+                         `<span class="show-more-btn">${expanded ? 'Show More' : 'Show Less'}</span>`;
+      });
+    }
+
+    contentDiv.appendChild(title);
+    contentDiv.appendChild(desc);
+
+    // Add Show More/Less button if needed
+    
 
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
 
     // Add elements to content
-    contentDiv.appendChild(title);
-    contentDiv.appendChild(desc);
-
-    // Add Show More/Less button if needed
-    if (isLong) {
-      const toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-desc';
-      toggleBtn.textContent = 'Show More';
-      toggleBtn.addEventListener('click', () => {
-        const expanded = toggleBtn.textContent === 'Show Less';
-        desc.textContent = expanded ? desc.dataset.short : desc.dataset.full;
-        toggleBtn.textContent = expanded ? 'Show More' : 'Show Less';
-      });
-      contentDiv.appendChild(toggleBtn);
-    }
-
-    contentDiv.appendChild(playBtn);
+    
 
     // Add image and content to carousel item
+    contentDiv.appendChild(playBtn);
     carouselItem.appendChild(img);
     carouselItem.appendChild(contentDiv);
     carouselContainer.appendChild(carouselItem);
