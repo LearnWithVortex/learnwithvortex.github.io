@@ -994,6 +994,7 @@ main {
   flex: 1;
   padding: 1.5rem;
   overflow-y: auto;
+  max-height: 63vh;
 }
 
 .settings-section {
@@ -1273,4 +1274,67 @@ footer {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+/* --- DARK MODE --- */
+body.dark-mode {
+  background-color: #181927;
+  color: #eaeaff;
+}
+body.dark-mode header, body.dark-mode footer {
+  background: #181927;
+  color: #eaeaff;
+}
+body.dark-mode .settings-panel,
+body.dark-mode .settings-content,
+body.dark-mode .settings-header,
+body.dark-mode .settings-section {
+  background: #20223a;
+  color: #eaeaff;
+}
+body.dark-mode input, body.dark-mode select, body.dark-mode .secondary-btn {
+  background: #232445;
+  color: #fafaff;
+  border-color: #36355d;
+}
+body.dark-mode .game-card,
+body.dark-mode .game-img-container {
+  background: #28294a;
+}
+
+/* --- COMPACT LAYOUT --- */
+.game-grid.compact .game-card {
+  margin: 6px 2px !important;
+  padding: 6px 4px !important;
+}
+.game-grid.compact {
+  gap: 4px !important;
+}
+.game-grid.compact .game-img,
+.game-grid.compact .game-img-container {
+  max-width: 85px !important;
+  max-height: 85px !important;
+}
+
+/* Style new settings toggles for visual separation */
+.setting-item + .setting-item {
+  margin-top: 14px;
+}
+/* Setting label align nicely with toggles */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Misc improved select for dark */
+body.dark-mode .select-wrapper select {
+  background: #21223a;
+  color: #eee;
+}
+
+/* Setting panel scroll on smaller screens */
+.settings-body {
+  max-height: 63vh;
+  overflow-y: auto;
 }
