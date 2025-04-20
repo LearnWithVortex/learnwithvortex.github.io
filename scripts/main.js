@@ -122,6 +122,7 @@ function setupEventListeners() {
   // Settings panel
   settingsBtn.addEventListener('click', () => {
     settingsPanel.classList.add('active');
+    applySettings(); // Ensure settings take effect if changed elsewhere
   });
   
   closeSettings.addEventListener('click', () => {
@@ -329,7 +330,10 @@ function applySettings() {
   // Thumbnail size
   if (settings.thumbnailSize) {
     thumbnailSize.value = settings.thumbnailSize;
-    gameList.setAttribute('data-size', settings.thumbnailSize);
+    // Apply to all .game-grid containers for consistency
+    document.querySelectorAll('.game-grid').forEach(grid => {
+      grid.setAttribute('data-size', settings.thumbnailSize);
+    });
   }
 }
 
@@ -347,6 +351,8 @@ function saveSettings() {
 // Render all games in the game list with improved animation
 function renderGames(gamesList) {
   gameList.innerHTML = '';
+  // Set data-size property for correct thumbnail
+  gameList.setAttribute('data-size', thumbnailSize.value);
   
   gamesList.forEach((game, index) => {
     const gameCard = document.createElement('div');
@@ -418,6 +424,7 @@ function renderGames(gamesList) {
 // Render recently played games, limited to 3 unless "View All" is clicked
 function renderRecentGames() {
   recentlyPlayed.innerHTML = '';
+  recentlyPlayed.setAttribute('data-size', thumbnailSize.value);
   const recentGames = JSON.parse(localStorage.getItem('recentlyPlayed') || '[]');
   
   if (recentGames.length === 0) {
@@ -731,6 +738,7 @@ function updateCarousel() {
 
 // New function to render favorite games
 function renderFavoriteGames() {
+  gameList.setAttribute('data-size', thumbnailSize.value);
   const favoriteGames = games.filter(game => favorites.includes(game.id));
   renderGames(favoriteGames);
 }
@@ -806,6 +814,15 @@ function setupCarouselControls() {
     startCarouselAutoRotation();
   });
 }
+
+// add this after thumbnailSize change to react to UI immediately
+thumbnailSize.addEventListener('change', () => {
+  saveSettings();
+  // Also apply size to existing grids right away
+  document.querySelectorAll('.game-grid').forEach(grid => {
+    grid.setAttribute('data-size', thumbnailSize.value);
+  });
+});
 
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);

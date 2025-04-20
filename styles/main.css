@@ -357,6 +357,15 @@ nav {
   box-shadow: 0 0 8px var(--accent-primary);
 }
 
+.nav-link.active::after {
+  width: 100%;
+  box-shadow: 0 0 12px var(--accent-primary);
+}
+
+.nav-link:not(.active)::after {
+  width: 0;
+}
+
 .nav-link:hover, .nav-link.active {
   color: var(--text-primary);
   transform: translateY(-2px);
@@ -783,7 +792,6 @@ main {
   width: 200px;           /* Ensures the width stays fixed */
   height: 200px;          /* Keeps the height fixed */
 }
-
 
 .game-card:hover .play-btn {
   transform: scale(1.1) rotate(360deg);
@@ -1234,4 +1242,35 @@ footer {
     gap: 1rem;
     text-align: center;
   }
+}
+
+/* --- THUMBNAIL SIZES based on data-size attribute--- */
+.game-grid[data-size="small"] .game-img,
+.game-grid[data-size="small"] .game-img-container {
+  width: 100px !important;
+  height: 100px !important;
+  min-width: 100px !important;
+  min-height: 100px !important;
+}
+.game-grid[data-size="medium"] .game-img,
+.game-grid[data-size="medium"] .game-img-container {
+  width: 150px !important;
+  height: 150px !important;
+  min-width: 150px !important;
+  min-height: 150px !important;
+}
+.game-grid[data-size="large"] .game-img,
+.game-grid[data-size="large"] .game-img-container {
+  width: 220px !important;
+  height: 220px !important;
+  min-width: 220px !important;
+  min-height: 220px !important;
+}
+
+/* Ensure inside .game-card, the image container and image match width */
+.game-img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
