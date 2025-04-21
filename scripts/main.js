@@ -232,7 +232,7 @@ function setupEventListeners() {
   // NEW SETTING TOGGLES
   toggleDarkmode.addEventListener('change', () => {
     saveSettings();
-    playSfx('click');
+   // playSfx('click');
   });
   toggleSfx.addEventListener('change', saveSettings);
   toggleCompact.addEventListener('change', saveSettings);
