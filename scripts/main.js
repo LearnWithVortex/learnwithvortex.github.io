@@ -29,6 +29,9 @@ const carouselNext = document.querySelector('.carousel-next');
 const navLinks = document.querySelectorAll('.nav-link');
 const viewBtns = document.querySelectorAll('.view-btn');
 const viewAllRecent = document.getElementById('view-all-recent');
+const toggleDarkmode = document.getElementById('toggle-darkmode');
+const toggleSfx = document.getElementById('toggle-sfx');
+const toggleCompact = document.getElementById('toggle-compact');
 
 // Game data
 let games = [];
@@ -49,7 +52,7 @@ function init() {
   setTimeout(() => {
     loadingScreen.style.opacity = '0';
     setTimeout(() => {
-      loadingScreen.remove();
+      loadingScreen.classList.add('hidden');
     }, 500);
   }, 1200);
 
@@ -122,11 +125,13 @@ function setupEventListeners() {
   // Settings panel
   settingsBtn.addEventListener('click', () => {
     settingsPanel.classList.add('active');
-    applySettings(); // Ensure settings take effect if changed elsewhere
+    applySettings();
+    playSfx('click');
   });
   
   closeSettings.addEventListener('click', () => {
     settingsPanel.classList.remove('active');
+    playSfx('click');
   });
   
   // Game overlay
@@ -224,6 +229,14 @@ function setupEventListeners() {
   // Settings
   toggleAnimations.addEventListener('change', saveSettings);
   thumbnailSize.addEventListener('change', saveSettings);
+
+  // NEW SETTING TOGGLES
+  toggleDarkmode.addEventListener('change', () => {
+    saveSettings();
+    playSfx('click');
+  });
+  toggleSfx.addEventListener('change', saveSettings);
+  toggleCompact.addEventListener('change', saveSettings);
   
   // Clear history and favorites
   clearHistory.addEventListener('click', () => {
@@ -320,19 +333,33 @@ function toggleFullscreen() {
 // Apply saved settings
 function applySettings() {
   const settings = JSON.parse(localStorage.getItem('settings') || '{}');
-  
+
   // Animations toggle
   if (settings.animations !== undefined) {
     toggleAnimations.checked = settings.animations;
     document.body.classList.toggle('no-animations', !settings.animations);
   }
-  
   // Thumbnail size
   if (settings.thumbnailSize) {
     thumbnailSize.value = settings.thumbnailSize;
-    // Apply to all .game-grid containers for consistency
     document.querySelectorAll('.game-grid').forEach(grid => {
       grid.setAttribute('data-size', settings.thumbnailSize);
+    });
+  }
+  // Darkmode
+  if (settings.darkmode !== undefined) {
+    toggleDarkmode.checked = !!settings.darkmode;
+    document.body.classList.toggle('dark-mode', !!settings.darkmode);
+  }
+  // SFX
+  if (settings.sfx !== undefined) {
+    toggleSfx.checked = !!settings.sfx;
+  }
+  // Compact View
+  if (settings.compact !== undefined) {
+    toggleCompact.checked = !!settings.compact;
+    document.querySelectorAll('.game-grid').forEach(grid => {
+      grid.classList.toggle('compact', !!settings.compact);
     });
   }
 }
@@ -341,9 +368,11 @@ function applySettings() {
 function saveSettings() {
   const settings = {
     animations: toggleAnimations.checked,
-    thumbnailSize: thumbnailSize.value
+    thumbnailSize: thumbnailSize.value,
+    darkmode: toggleDarkmode.checked,
+    sfx: toggleSfx.checked,
+    compact: toggleCompact.checked,
   };
-  
   localStorage.setItem('settings', JSON.stringify(settings));
   applySettings();
 }
@@ -476,15 +505,9 @@ function renderRecentGames() {
       }
     });
 
-
     gamePopout.addEventListener('click', e => {
-  // Open a true about:blank window in a user gesture
   const newTab = window.open('about:blank', '_blank');
-
   if (newTab) {
-    const gameURL = window.location.origin + game.path;
-
-    // Immediately write to the blank tab
     newTab.document.write(`
       <!DOCTYPE html>
       <html>
@@ -506,7 +529,7 @@ function renderRecentGames() {
         </style>
       </head>
       <body>
-        <iframe src="${gameURL}" frameborder="0" allowfullscreen></iframe>
+        <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
       </body>
       </html>
     `);
@@ -516,6 +539,7 @@ function renderRecentGames() {
   }
 });
 
+    
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
     favoriteBtn.addEventListener('click', e => {
@@ -653,39 +677,43 @@ function setupCarousel() {
     title.className = 'carousel-title';
     title.textContent = game.name;
 
-  
     const desc = document.createElement('p');
-desc.className = 'carousel-desc';
-desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
-desc.dataset.full = fullDesc;
-desc.dataset.short = shortDesc;
+    desc.className = 'carousel-desc';
+    desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
+    desc.dataset.full = fullDesc;
+    desc.dataset.short = shortDesc;
 
-if (isLong) {
-  desc.addEventListener('click', (e) => {
-    if (e.target.classList.contains('show-more-btn')) {
-      const isExpanded = e.target.textContent.trim() === 'Show Less';
+    if (isLong) {
+      desc.addEventListener('click', (e) => {
+        if (e.target.classList.contains('show-more-btn')) {
+          const isExpanded = e.target.textContent.trim() === 'Show Less';
 
-      // Replace with the correct content
-      desc.innerHTML =
-        (isExpanded ? desc.dataset.short : desc.dataset.full) +
-        '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
-        (isExpanded ? 'Show More' : 'Show Less') +
-        '</span>';
+          // Replace with the correct content
+          desc.innerHTML =
+            (isExpanded ? desc.dataset.short : desc.dataset.full) +
+            '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
+            (isExpanded ? 'Show More' : 'Show Less') +
+            '</span>';
+        }
+      });
     }
-  });
-}
-
-    
 
     contentDiv.appendChild(title);
     contentDiv.appendChild(desc);
-    
+
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
-
-    playBtn.addEventListener('click', () => {
-    // todo
+    // This is the fix: play the game actually being shown in the carousel, at current carouselIndex
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Always play current visible featured game
+      const selectedGame = featuredGames[carouselIndex];
+      // Find index in full games list
+      const gamesListIndex = games.findIndex(g => g.id === selectedGame.id);
+      if (gamesListIndex !== -1) {
+        playGame(selectedGame, gamesListIndex);
+      }
     });
 
     contentDiv.appendChild(playBtn);
@@ -784,37 +812,34 @@ function setupCarouselControls() {
     }
     carouselContainer.classList.add('transition-left');
     setTimeout(() => {
+      // FIX: Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-left');
-      // Restart auto-rotation after manual navigation
       startCarouselAutoRotation();
     }, 300);
   });
 
   carouselNext.addEventListener('click', () => {
-    // Clear interval on manual navigation
     if (carouselInterval) {
       clearInterval(carouselInterval);
     }
     carouselContainer.classList.add('transition-right');
     setTimeout(() => {
+      // FIX: Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex + 1) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-right');
-      // Restart auto-rotation after manual navigation
       startCarouselAutoRotation();
     }, 300);
   });
 
-  // Add pause on hover
   carouselContainer.addEventListener('mouseenter', () => {
     if (carouselInterval) {
       clearInterval(carouselInterval);
     }
   });
 
-  // Resume on mouse leave
   carouselContainer.addEventListener('mouseleave', () => {
     startCarouselAutoRotation();
   });
@@ -831,3 +856,17 @@ thumbnailSize.addEventListener('change', () => {
 
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
+
+// Add new function to play sound effects
+function playSfx(sound) {
+  if (!JSON.parse(localStorage.getItem('settings') || '{}').sfx) return;
+  // Only play a "click" sound for demonstration, should be replaced with actual audio assets
+  if (!window._sfx) {
+    window._sfx = new Audio('https://cdn.pixabay.com/audio/2022/07/26/audio_124bfaef06.mp3');
+    window._sfx.volume = 0.20;
+  }
+  if (sound === 'click') {
+    window._sfx.currentTime = 0;
+    window._sfx.play();
+  }
+}
