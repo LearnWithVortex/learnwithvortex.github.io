@@ -20,7 +20,6 @@ const favoriteGame = document.getElementById('favorite-game');
 const fullscreenGame = document.getElementById('fullscreen-game');
 const clearHistory = document.getElementById('clear-history');
 const resetFavorites = document.getElementById('reset-favorites');
-const toggleAnimations = document.getElementById('toggle-animations');
 const thumbnailSize = document.getElementById('thumbnail-size');
 const carouselContainer = document.getElementById('featured-carousel');
 const carouselDots = document.getElementById('carousel-dots');
@@ -226,7 +225,6 @@ function setupEventListeners() {
   });
   
   // Settings
-  toggleAnimations.addEventListener('change', saveSettings);
   thumbnailSize.addEventListener('change', saveSettings);
 
   // NEW SETTING TOGGLES
@@ -364,10 +362,8 @@ function applySettings() {
 // Save settings to localStorage
 function saveSettings() {
   const settings = {
-    animations: toggleAnimations.checked,
     thumbnailSize: thumbnailSize.value,
     darkmode: toggleDarkmode.checked,
-    sfx: toggleSfx.checked,
     compact: toggleCompact.checked,
   };
   localStorage.setItem('settings', JSON.stringify(settings));
