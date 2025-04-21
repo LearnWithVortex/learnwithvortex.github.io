@@ -478,13 +478,14 @@ function renderRecentGames() {
 
 
     gamePopout.addEventListener('click', e => {
-  // Create the popout window synchronously in response to the click
-  const newTab = window.open('', '_blank');
+  // Open a true about:blank window in a user gesture
+  const newTab = window.open('about:blank', '_blank');
 
   if (newTab) {
     const gameURL = window.location.origin + game.path;
 
-    const html = `
+    // Immediately write to the blank tab
+    newTab.document.write(`
       <!DOCTYPE html>
       <html>
       <head>
@@ -508,22 +509,13 @@ function renderRecentGames() {
         <iframe src="${gameURL}" frameborder="0" allowfullscreen></iframe>
       </body>
       </html>
-    `;
-
-    try {
-      // Write directly to the new tab
-      newTab.document.write(html);
-      //newTab.document.close();
-    } catch (err) {
-      // If document.write fails (e.g., in some iOS cases), fallback
-      newTab.location.href = gameURL;
-    }
+    `);
+    newTab.document.close();
   } else {
     alert('Popup blocked! Please allow popups for this site.');
   }
 });
 
-    
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
     favoriteBtn.addEventListener('click', e => {
