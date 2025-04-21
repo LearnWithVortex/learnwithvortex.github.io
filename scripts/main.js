@@ -857,16 +857,3 @@ thumbnailSize.addEventListener('change', () => {
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
 
-// Add new function to play sound effects
-function playSfx(sound) {
-  if (!JSON.parse(localStorage.getItem('settings') || '{}').sfx) return;
-  // Only play a "click" sound for demonstration, should be replaced with actual audio assets
-  if (!window._sfx) {
-    window._sfx = new Audio('https://cdn.pixabay.com/audio/2022/07/26/audio_124bfaef06.mp3');
-    window._sfx.volume = 0.20;
-  }
-  if (sound === 'click') {
-    window._sfx.currentTime = 0;
-    window._sfx.play();
-  }
-}
