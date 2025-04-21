@@ -515,7 +515,7 @@ function renderRecentGames() {
     const popup = window.open("about:blank", "_blank");
 
     if (!popup || popup.closed) {
-      alert("Please allow popups and redirects for popping out games to work.");
+     // alert("Please allow popups and redirects for popping out games to work.");
     } else {
       // Set title and favicon
       popup.document.title = "Vortex - Game Popout";
@@ -542,8 +542,12 @@ function renderRecentGames() {
 
       popup.document.body.style.margin = "0";
       popup.document.body.appendChild(iframe);
-      popup.document.close();
-
+      gameOverlay.classList.add('closing');
+    setTimeout(() => {
+      gameOverlay.classList.remove('active');
+      gameOverlay.classList.remove('closing');
+      gameFrame.src = '';
+    }, 300);
       // Optional redirect of original tab
       // location.replace("https://www.google.com");
     }
