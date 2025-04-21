@@ -687,8 +687,6 @@ function setupCarousel() {
       desc.addEventListener('click', (e) => {
         if (e.target.classList.contains('show-more-btn')) {
           const isExpanded = e.target.textContent.trim() === 'Show Less';
-
-          // Replace with the correct content
           desc.innerHTML =
             (isExpanded ? desc.dataset.short : desc.dataset.full) +
             '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
@@ -701,15 +699,16 @@ function setupCarousel() {
     contentDiv.appendChild(title);
     contentDiv.appendChild(desc);
 
+    // Carousel "Play Now" button
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
-    // This is the fix: play the game actually being shown in the carousel, at current carouselIndex
     playBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      // Always play current visible featured game
-      const selectedGame = featuredGames[carouselIndex];
-      // Find index in full games list
+      // Always play the featured game for the current carousel index
+      const currentIndex = carouselIndex % featuredGames.length;
+      const selectedGame = featuredGames[currentIndex];
+      // Find it in the all games list to get correct index for playGame
       const gamesListIndex = games.findIndex(g => g.id === selectedGame.id);
       if (gamesListIndex !== -1) {
         playGame(selectedGame, gamesListIndex);
@@ -722,27 +721,34 @@ function setupCarousel() {
     carouselContainer.appendChild(carouselItem);
 
     // Create dot with click listener
-    const dot = document.createElement('div'); // using div for dot
+    const dot = document.createElement('div');
     dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
     dot.addEventListener('click', () => {
+      stopCarouselAutoRotation();
       carouselIndex = index;
       updateCarousel();
+      startCarouselAutoRotation();
     });
     carouselDots.appendChild(dot);
   });
 
-  // Start auto-rotation
+  // Set start position
+  updateCarousel();
+  // Start auto-rotation (ensure only one timer)
   startCarouselAutoRotation();
+}
+
+// Helper function to stop the carousel interval
+function stopCarouselAutoRotation() {
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+    carouselInterval = null;
+  }
 }
 
 // Add new function for carousel auto-rotation
 function startCarouselAutoRotation() {
-  // Clear any existing interval
-  if (carouselInterval) {
-    clearInterval(carouselInterval);
-  }
-
-  // Rotate every 5 seconds
+  stopCarouselAutoRotation();
   carouselInterval = setInterval(() => {
     carouselContainer.classList.add('transition-right');
     setTimeout(() => {
@@ -756,7 +762,8 @@ function startCarouselAutoRotation() {
 // Update the carousel position and active dot with improved animation
 function updateCarousel() {
   carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
-  
+
+  // Update active dot
   const dots = carouselDots.querySelectorAll('.carousel-dot');
   dots.forEach((dot, index) => {
     if (index === carouselIndex) {
@@ -803,16 +810,12 @@ function startCarouselAutoRotation() {
   }, 5000);
 }
 
-// Update event listeners in setupCarousel to pause on interaction
+// Update event listeners in setupCarouselControls to pause on interaction
 function setupCarouselControls() {
   carouselPrev.addEventListener('click', () => {
-    // Clear interval on manual navigation
-    if (carouselInterval) {
-      clearInterval(carouselInterval);
-    }
+    stopCarouselAutoRotation();
     carouselContainer.classList.add('transition-left');
     setTimeout(() => {
-      // FIX: Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-left');
@@ -821,12 +824,9 @@ function setupCarouselControls() {
   });
 
   carouselNext.addEventListener('click', () => {
-    if (carouselInterval) {
-      clearInterval(carouselInterval);
-    }
+    stopCarouselAutoRotation();
     carouselContainer.classList.add('transition-right');
     setTimeout(() => {
-      // FIX: Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex + 1) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-right');
@@ -835,9 +835,7 @@ function setupCarouselControls() {
   });
 
   carouselContainer.addEventListener('mouseenter', () => {
-    if (carouselInterval) {
-      clearInterval(carouselInterval);
-    }
+    stopCarouselAutoRotation();
   });
 
   carouselContainer.addEventListener('mouseleave', () => {
