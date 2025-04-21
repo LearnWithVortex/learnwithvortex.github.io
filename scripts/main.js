@@ -476,10 +476,15 @@ function renderRecentGames() {
       }
     });
 
+
     gamePopout.addEventListener('click', e => {
-  const newTab = window.open('about:blank', '_blank');
+  // Create the popout window synchronously in response to the click
+  const newTab = window.open('', '_blank');
+
   if (newTab) {
-    newTab.document.write(`
+    const gameURL = window.location.origin + game.path;
+
+    const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -500,11 +505,19 @@ function renderRecentGames() {
         </style>
       </head>
       <body>
-        <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
+        <iframe src="${gameURL}" frameborder="0" allowfullscreen></iframe>
       </body>
       </html>
-    `);
-    newTab.document.close();
+    `;
+
+    try {
+      // Write directly to the new tab
+      newTab.document.write(html);
+      //newTab.document.close();
+    } catch (err) {
+      // If document.write fails (e.g., in some iOS cases), fallback
+      newTab.location.href = gameURL;
+    }
   } else {
     alert('Popup blocked! Please allow popups for this site.');
   }
