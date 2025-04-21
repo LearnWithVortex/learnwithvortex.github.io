@@ -704,14 +704,12 @@ function setupCarousel() {
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
-
-    // Play the currently shown featured game when clicked
+    // This is the fix: play the game actually being shown in the carousel, at current carouselIndex
     playBtn.addEventListener('click', (e) => {
-      // Prevent propagation to avoid unwanted carousel behavior
       e.stopPropagation();
-      // Always play by current carousel index (the visible one)
+      // Always play current visible featured game
       const selectedGame = featuredGames[carouselIndex];
-      // Find the index of this game in the main games list for correct playGame logic
+      // Find index in full games list
       const gamesListIndex = games.findIndex(g => g.id === selectedGame.id);
       if (gamesListIndex !== -1) {
         playGame(selectedGame, gamesListIndex);
