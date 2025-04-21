@@ -677,42 +677,39 @@ function setupCarousel() {
     title.className = 'carousel-title';
     title.textContent = game.name;
 
+  
     const desc = document.createElement('p');
-    desc.className = 'carousel-desc';
-    desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
-    desc.dataset.full = fullDesc;
-    desc.dataset.short = shortDesc;
+desc.className = 'carousel-desc';
+desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
+desc.dataset.full = fullDesc;
+desc.dataset.short = shortDesc;
 
-    if (isLong) {
-      desc.addEventListener('click', (e) => {
-        if (e.target.classList.contains('show-more-btn')) {
-          const isExpanded = e.target.textContent.trim() === 'Show Less';
-          desc.innerHTML =
-            (isExpanded ? desc.dataset.short : desc.dataset.full) +
-            '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
-            (isExpanded ? 'Show More' : 'Show Less') +
-            '</span>';
-        }
-      });
+if (isLong) {
+  desc.addEventListener('click', (e) => {
+    if (e.target.classList.contains('show-more-btn')) {
+      const isExpanded = e.target.textContent.trim() === 'Show Less';
+
+      // Replace with the correct content
+      desc.innerHTML =
+        (isExpanded ? desc.dataset.short : desc.dataset.full) +
+        '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
+        (isExpanded ? 'Show More' : 'Show Less') +
+        '</span>';
     }
+  });
+}
+
+    
 
     contentDiv.appendChild(title);
     contentDiv.appendChild(desc);
-
-    // Carousel "Play Now" button
+    
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
-    playBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      // Always play the featured game for the current carousel index
-      const currentIndex = carouselIndex % featuredGames.length;
-      const selectedGame = featuredGames[currentIndex];
-      // Find it in the all games list to get correct index for playGame
-      const gamesListIndex = games.findIndex(g => g.id === selectedGame.id);
-      if (gamesListIndex !== -1) {
-        playGame(selectedGame, gamesListIndex);
-      }
+
+    playBtn.addEventListener('click', () => {
+    // todo
     });
 
     contentDiv.appendChild(playBtn);
@@ -721,34 +718,27 @@ function setupCarousel() {
     carouselContainer.appendChild(carouselItem);
 
     // Create dot with click listener
-    const dot = document.createElement('div');
+    const dot = document.createElement('div'); // using div for dot
     dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
     dot.addEventListener('click', () => {
-      stopCarouselAutoRotation();
       carouselIndex = index;
       updateCarousel();
-      startCarouselAutoRotation();
     });
     carouselDots.appendChild(dot);
   });
 
-  // Set start position
-  updateCarousel();
-  // Start auto-rotation (ensure only one timer)
+  // Start auto-rotation
   startCarouselAutoRotation();
-}
-
-// Helper function to stop the carousel interval
-function stopCarouselAutoRotation() {
-  if (carouselInterval) {
-    clearInterval(carouselInterval);
-    carouselInterval = null;
-  }
 }
 
 // Add new function for carousel auto-rotation
 function startCarouselAutoRotation() {
-  stopCarouselAutoRotation();
+  // Clear any existing interval
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+  }
+
+  // Rotate every 5 seconds
   carouselInterval = setInterval(() => {
     carouselContainer.classList.add('transition-right');
     setTimeout(() => {
@@ -762,8 +752,7 @@ function startCarouselAutoRotation() {
 // Update the carousel position and active dot with improved animation
 function updateCarousel() {
   carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
-
-  // Update active dot
+  
   const dots = carouselDots.querySelectorAll('.carousel-dot');
   dots.forEach((dot, index) => {
     if (index === carouselIndex) {
@@ -810,44 +799,49 @@ function startCarouselAutoRotation() {
   }, 5000);
 }
 
-// Update event listeners in setupCarouselControls to pause on interaction
+// Update event listeners in setupCarousel to pause on interaction
 function setupCarouselControls() {
-  // Remove previous listeners if for some reason this is called more than once (safe guard).
-  carouselPrev.replaceWith(carouselPrev.cloneNode(true));
-  carouselNext.replaceWith(carouselNext.cloneNode(true));
-  // Re-get buttons after clone
-  const leftBtn = document.querySelector('.carousel-prev');
-  const rightBtn = document.querySelector('.carousel-next');
+  carouselPrev.addEventListener('click', () => {
+    // Clear interval on manual navigation
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
+    }
+    carouselContainer.classList.add('transition-left');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-left');
+      // Restart auto-rotation after manual navigation
+      startCarouselAutoRotation();
+    }, 300);
+  });
 
-  leftBtn.addEventListener('click', () => {
-    stopCarouselAutoRotation();
-    // Only navigate if featuredGames is not empty
-    if (featuredGames.length > 0) {
-      carouselContainer.classList.add('transition-left');
-      setTimeout(() => {
-        carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
-        updateCarousel();
-        carouselContainer.classList.remove('transition-left');
-        startCarouselAutoRotation();
-      }, 300);
+  carouselNext.addEventListener('click', () => {
+    // Clear interval on manual navigation
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
+    }
+    carouselContainer.classList.add('transition-right');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex + 1) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-right');
+      // Restart auto-rotation after manual navigation
+      startCarouselAutoRotation();
+    }, 300);
+  });
+
+  // Add pause on hover
+  carouselContainer.addEventListener('mouseenter', () => {
+    if (carouselInterval) {
+      clearInterval(carouselInterval);
     }
   });
 
-  rightBtn.addEventListener('click', () => {
-    stopCarouselAutoRotation();
-    if (featuredGames.length > 0) {
-      carouselContainer.classList.add('transition-right');
-      setTimeout(() => {
-        carouselIndex = (carouselIndex + 1) % featuredGames.length;
-        updateCarousel();
-        carouselContainer.classList.remove('transition-right');
-        startCarouselAutoRotation();
-      }, 300);
-    }
+  // Resume on mouse leave
+  carouselContainer.addEventListener('mouseleave', () => {
+    startCarouselAutoRotation();
   });
-
-  carouselContainer.addEventListener('mouseenter', stopCarouselAutoRotation);
-  carouselContainer.addEventListener('mouseleave', startCarouselAutoRotation);
 }
 
 // add this after thumbnailSize change to react to UI immediately
