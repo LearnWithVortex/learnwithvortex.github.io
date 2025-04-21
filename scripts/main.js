@@ -29,9 +29,6 @@ const carouselNext = document.querySelector('.carousel-next');
 const navLinks = document.querySelectorAll('.nav-link');
 const viewBtns = document.querySelectorAll('.view-btn');
 const viewAllRecent = document.getElementById('view-all-recent');
-const toggleDarkmode = document.getElementById('toggle-darkmode');
-const toggleSfx = document.getElementById('toggle-sfx');
-const toggleCompact = document.getElementById('toggle-compact');
 
 // Game data
 let games = [];
@@ -125,13 +122,11 @@ function setupEventListeners() {
   // Settings panel
   settingsBtn.addEventListener('click', () => {
     settingsPanel.classList.add('active');
-    applySettings();
-    playSfx('click');
+    applySettings(); // Ensure settings take effect if changed elsewhere
   });
   
   closeSettings.addEventListener('click', () => {
     settingsPanel.classList.remove('active');
-    playSfx('click');
   });
   
   // Game overlay
@@ -229,14 +224,6 @@ function setupEventListeners() {
   // Settings
   toggleAnimations.addEventListener('change', saveSettings);
   thumbnailSize.addEventListener('change', saveSettings);
-
-  // NEW SETTING TOGGLES
-  toggleDarkmode.addEventListener('change', () => {
-    saveSettings();
-    playSfx('click');
-  });
-  toggleSfx.addEventListener('change', saveSettings);
-  toggleCompact.addEventListener('change', saveSettings);
   
   // Clear history and favorites
   clearHistory.addEventListener('click', () => {
@@ -333,33 +320,19 @@ function toggleFullscreen() {
 // Apply saved settings
 function applySettings() {
   const settings = JSON.parse(localStorage.getItem('settings') || '{}');
-
+  
   // Animations toggle
   if (settings.animations !== undefined) {
     toggleAnimations.checked = settings.animations;
     document.body.classList.toggle('no-animations', !settings.animations);
   }
+  
   // Thumbnail size
   if (settings.thumbnailSize) {
     thumbnailSize.value = settings.thumbnailSize;
+    // Apply to all .game-grid containers for consistency
     document.querySelectorAll('.game-grid').forEach(grid => {
       grid.setAttribute('data-size', settings.thumbnailSize);
-    });
-  }
-  // Darkmode
-  if (settings.darkmode !== undefined) {
-    toggleDarkmode.checked = !!settings.darkmode;
-    document.body.classList.toggle('dark-mode', !!settings.darkmode);
-  }
-  // SFX
-  if (settings.sfx !== undefined) {
-    toggleSfx.checked = !!settings.sfx;
-  }
-  // Compact View
-  if (settings.compact !== undefined) {
-    toggleCompact.checked = !!settings.compact;
-    document.querySelectorAll('.game-grid').forEach(grid => {
-      grid.classList.toggle('compact', !!settings.compact);
     });
   }
 }
@@ -368,11 +341,9 @@ function applySettings() {
 function saveSettings() {
   const settings = {
     animations: toggleAnimations.checked,
-    thumbnailSize: thumbnailSize.value,
-    darkmode: toggleDarkmode.checked,
-    sfx: toggleSfx.checked,
-    compact: toggleCompact.checked,
+    thumbnailSize: thumbnailSize.value
   };
+  
   localStorage.setItem('settings', JSON.stringify(settings));
   applySettings();
 }
@@ -855,17 +826,3 @@ thumbnailSize.addEventListener('change', () => {
 
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
-
-// Add new function to play sound effects
-function playSfx(sound) {
-  if (!JSON.parse(localStorage.getItem('settings') || '{}').sfx) return;
-  // Only play a "click" sound for demonstration, should be replaced with actual audio assets
-  if (!window._sfx) {
-    window._sfx = new Audio('https://cdn.pixabay.com/audio/2022/07/26/audio_124bfaef06.mp3');
-    window._sfx.volume = 0.20;
-  }
-  if (sound === 'click') {
-    window._sfx.currentTime = 0;
-    window._sfx.play();
-  }
-}
