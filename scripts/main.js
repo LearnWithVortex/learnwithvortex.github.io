@@ -130,7 +130,7 @@ function setupEventListeners() {
   
   closeSettings.addEventListener('click', () => {
     settingsPanel.classList.remove('active');
-    playSfx('click');
+  //  playSfx('click');
   });
   
   // Game overlay
@@ -178,7 +178,7 @@ function setupEventListeners() {
   // Favorites button
   favoritesBtn.addEventListener('click', () => {
     toggleActiveButton(favoritesBtn);
-    currentView = 'favorites';
+    //currentView = 'favorites';
     renderFavoriteGames();
   });
   
