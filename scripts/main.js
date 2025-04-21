@@ -677,39 +677,45 @@ function setupCarousel() {
     title.className = 'carousel-title';
     title.textContent = game.name;
 
-  
     const desc = document.createElement('p');
-desc.className = 'carousel-desc';
-desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
-desc.dataset.full = fullDesc;
-desc.dataset.short = shortDesc;
+    desc.className = 'carousel-desc';
+    desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
+    desc.dataset.full = fullDesc;
+    desc.dataset.short = shortDesc;
 
-if (isLong) {
-  desc.addEventListener('click', (e) => {
-    if (e.target.classList.contains('show-more-btn')) {
-      const isExpanded = e.target.textContent.trim() === 'Show Less';
+    if (isLong) {
+      desc.addEventListener('click', (e) => {
+        if (e.target.classList.contains('show-more-btn')) {
+          const isExpanded = e.target.textContent.trim() === 'Show Less';
 
-      // Replace with the correct content
-      desc.innerHTML =
-        (isExpanded ? desc.dataset.short : desc.dataset.full) +
-        '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
-        (isExpanded ? 'Show More' : 'Show Less') +
-        '</span>';
+          // Replace with the correct content
+          desc.innerHTML =
+            (isExpanded ? desc.dataset.short : desc.dataset.full) +
+            '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
+            (isExpanded ? 'Show More' : 'Show Less') +
+            '</span>';
+        }
+      });
     }
-  });
-}
-
-    
 
     contentDiv.appendChild(title);
     contentDiv.appendChild(desc);
-    
+
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
 
-    playBtn.addEventListener('click', () => {
-    // todo
+    // Play the currently shown featured game when clicked
+    playBtn.addEventListener('click', (e) => {
+      // Prevent propagation to avoid unwanted carousel behavior
+      e.stopPropagation();
+      // Always play by current carousel index (the visible one)
+      const selectedGame = featuredGames[carouselIndex];
+      // Find the index of this game in the main games list for correct playGame logic
+      const gamesListIndex = games.findIndex(g => g.id === selectedGame.id);
+      if (gamesListIndex !== -1) {
+        playGame(selectedGame, gamesListIndex);
+      }
     });
 
     contentDiv.appendChild(playBtn);
