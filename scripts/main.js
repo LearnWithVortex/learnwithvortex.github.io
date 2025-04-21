@@ -49,7 +49,7 @@ function init() {
   setTimeout(() => {
     loadingScreen.style.opacity = '0';
     setTimeout(() => {
-      loadingScreen.classList.add('hidden');
+      loadingScreen.remove();
     }, 500);
   }, 1200);
 
