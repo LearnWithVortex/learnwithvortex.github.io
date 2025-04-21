@@ -80,31 +80,28 @@
       transform: translateY(-2px);
     }
 
-    /* Toast styles */
     .toast {
       position: fixed;
       top: 30px;
       right: 30px;
-      background: #ff4d4d;
-      padding: 1rem 1.5rem;
+      background: rgba(255, 0, 0, 0.85);
       color: white;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px red;
+      z-index: 1000;
       opacity: 0;
-      pointer-events: none;
-      animation: showToast 3s forwards;
+      animation: slideIn 0.3s ease forwards;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes showToast {
-      0% { opacity: 0; transform: translateY(10px); }
-      10% { opacity: 1; transform: translateY(0); }
-      90% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-10px); }
     }
   </style>
 </head>
@@ -116,26 +113,41 @@
     <button onclick="login()">Login</button>
   </div>
 
+  <!-- Toast container -->
+  <div id="toast" class="toast" style="display:none;"></div>
+
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
 
   <script>
-    // Firebase config
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCTKdR30MEYIJ-iGj8iHMleQJAjvXy-GQg",
       authDomain: "adroit-solstice-427414-s8.firebaseapp.com",
       databaseURL: "https://adroit-solstice-427414-s8-default-rtdb.firebaseio.com",
       projectId: "adroit-solstice-427414-s8",
-      storageBucket: "adroit-solstice-427414-s8.firebasestorage.app",
+      storageBucket: "adroit-solstice-427414-s8.appspot.com",
       messagingSenderId: "666672054008",
       appId: "1:666672054008:web:41852d171946cc639dc50d",
       measurementId: "G-GKMT3HDLFB"
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+    const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Toast error
+    function showErrorToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      toast.style.animation = 'slideIn 0.3s ease forwards';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 4000);
+    }
 
     // Login function
     function login() {
@@ -143,32 +155,31 @@
       const password = document.getElementById('password').value;
 
       auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          window.location.href = "/index.html";
+        .then((userCredential) => {
+          const user = userCredential.user;
+          const uid = user.uid;
+          const timestamp = new Date().toISOString();
+
+          // Log to database
+          db.ref("logins/" + uid).push({
+            email: user.email,
+            timestamp: timestamp
+          });
+
+          // Redirect
+          window.location.href = "/indec.html";
         })
         .catch(error => {
           showErrorToast(error.message);
         });
     }
 
-    // Redirect on auth state change
+    // Optional auto redirect if logged in
     auth.onAuthStateChanged(user => {
       if (user) {
-        window.location.href = "/dashboard.html";
+        window.location.href = "/index.html";
       }
     });
-
-    // Show error as toast
-    function showErrorToast(message) {
-      const toast = document.createElement('div');
-      toast.classList.add('toast');
-      toast.textContent = message;
-      document.body.appendChild(toast);
-
-      setTimeout(() => {
-        toast.remove();
-      }, 3000);  // Remove after 3 seconds
-    }
   </script>
 </body>
 </html>
