@@ -812,35 +812,42 @@ function startCarouselAutoRotation() {
 
 // Update event listeners in setupCarouselControls to pause on interaction
 function setupCarouselControls() {
-  carouselPrev.addEventListener('click', () => {
+  // Remove previous listeners if for some reason this is called more than once (safe guard).
+  carouselPrev.replaceWith(carouselPrev.cloneNode(true));
+  carouselNext.replaceWith(carouselNext.cloneNode(true));
+  // Re-get buttons after clone
+  const leftBtn = document.querySelector('.carousel-prev');
+  const rightBtn = document.querySelector('.carousel-next');
+
+  leftBtn.addEventListener('click', () => {
     stopCarouselAutoRotation();
-    carouselContainer.classList.add('transition-left');
-    setTimeout(() => {
-      carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
-      updateCarousel();
-      carouselContainer.classList.remove('transition-left');
-      startCarouselAutoRotation();
-    }, 300);
+    // Only navigate if featuredGames is not empty
+    if (featuredGames.length > 0) {
+      carouselContainer.classList.add('transition-left');
+      setTimeout(() => {
+        carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
+        updateCarousel();
+        carouselContainer.classList.remove('transition-left');
+        startCarouselAutoRotation();
+      }, 300);
+    }
   });
 
-  carouselNext.addEventListener('click', () => {
+  rightBtn.addEventListener('click', () => {
     stopCarouselAutoRotation();
-    carouselContainer.classList.add('transition-right');
-    setTimeout(() => {
-      carouselIndex = (carouselIndex + 1) % featuredGames.length;
-      updateCarousel();
-      carouselContainer.classList.remove('transition-right');
-      startCarouselAutoRotation();
-    }, 300);
+    if (featuredGames.length > 0) {
+      carouselContainer.classList.add('transition-right');
+      setTimeout(() => {
+        carouselIndex = (carouselIndex + 1) % featuredGames.length;
+        updateCarousel();
+        carouselContainer.classList.remove('transition-right');
+        startCarouselAutoRotation();
+      }, 300);
+    }
   });
 
-  carouselContainer.addEventListener('mouseenter', () => {
-    stopCarouselAutoRotation();
-  });
-
-  carouselContainer.addEventListener('mouseleave', () => {
-    startCarouselAutoRotation();
-  });
+  carouselContainer.addEventListener('mouseenter', stopCarouselAutoRotation);
+  carouselContainer.addEventListener('mouseleave', startCarouselAutoRotation);
 }
 
 // add this after thumbnailSize change to react to UI immediately
