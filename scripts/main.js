@@ -30,7 +30,6 @@ const navLinks = document.querySelectorAll('.nav-link');
 const viewBtns = document.querySelectorAll('.view-btn');
 const viewAllRecent = document.getElementById('view-all-recent');
 const toggleDarkmode = document.getElementById('toggle-darkmode');
-const toggleSfx = document.getElementById('toggle-sfx');
 const toggleCompact = document.getElementById('toggle-compact');
 
 // Game data
@@ -126,7 +125,7 @@ function setupEventListeners() {
   settingsBtn.addEventListener('click', () => {
     settingsPanel.classList.add('active');
     applySettings();
-    playSfx('click');
+   // playSfx('click');
   });
   
   closeSettings.addEventListener('click', () => {
@@ -352,9 +351,7 @@ function applySettings() {
     document.body.classList.toggle('dark-mode', !!settings.darkmode);
   }
   // SFX
-  if (settings.sfx !== undefined) {
-    toggleSfx.checked = !!settings.sfx;
-  }
+
   // Compact View
   if (settings.compact !== undefined) {
     toggleCompact.checked = !!settings.compact;
@@ -506,36 +503,50 @@ function renderRecentGames() {
     });
 
     gamePopout.addEventListener('click', e => {
-  const newTab = window.open('about:blank', '_blank');
-  if (newTab) {
-    newTab.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Vortex - Game Popout</title>
-        <style>
-          html, body, iframe {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            border: none;
-          }
-          iframe {
-            display: block;
-            height: 100%;
-            width: 100%;
-          }
-        </style>
-      </head>
-      <body>
-        <iframe src="${window.location.origin + game.path}" frameborder="0" allowfullscreen></iframe>
-      </body>
-      </html>
-    `);
-    newTab.document.close();
-  } else {
-    alert('Popup blocked! Please allow popups for this site.');
+  let inFrame;
+  try {
+    inFrame = window !== top;
+  } catch (e) {
+    inFrame = true;
+  }
+
+  // Only run if not already in an iframe and not Firefox
+  if (!navigator.userAgent.includes("Firefox")) {
+    const popup = window.open("about:blank", "_blank");
+
+    if (!popup || popup.closed) {
+      alert("Please allow popups and redirects for popping out games to work.");
+    } else {
+      // Set title and favicon
+      popup.document.title = "Vortex - Game Popout";
+      const link = popup.document.createElement("link");
+      link.rel = "icon";
+      link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"; // Replace with your own if desired
+      popup.document.head.appendChild(link);
+
+      // Create and style iframe
+      const iframe = popup.document.createElement("iframe");
+      iframe.src = window.location.origin + game.path;
+      Object.assign(iframe.style, {
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100%",
+        margin: "0",
+        padding: "0",
+        border: "none",
+        outline: "none",
+        zIndex: "9999"
+      });
+
+      popup.document.body.style.margin = "0";
+      popup.document.body.appendChild(iframe);
+      popup.document.close();
+
+      // Optional redirect of original tab
+      // location.replace("https://www.google.com");
+    }
   }
 });
 
