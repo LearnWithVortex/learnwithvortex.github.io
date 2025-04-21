@@ -814,37 +814,34 @@ function setupCarouselControls() {
     }
     carouselContainer.classList.add('transition-left');
     setTimeout(() => {
+      // FIX: Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-left');
-      // Restart auto-rotation after manual navigation
       startCarouselAutoRotation();
     }, 300);
   });
 
   carouselNext.addEventListener('click', () => {
-    // Clear interval on manual navigation
     if (carouselInterval) {
       clearInterval(carouselInterval);
     }
     carouselContainer.classList.add('transition-right');
     setTimeout(() => {
+      // FIX: Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex + 1) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-right');
-      // Restart auto-rotation after manual navigation
       startCarouselAutoRotation();
     }, 300);
   });
 
-  // Add pause on hover
   carouselContainer.addEventListener('mouseenter', () => {
     if (carouselInterval) {
       clearInterval(carouselInterval);
     }
   });
 
-  // Resume on mouse leave
   carouselContainer.addEventListener('mouseleave', () => {
     startCarouselAutoRotation();
   });
