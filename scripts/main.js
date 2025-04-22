@@ -43,6 +43,8 @@ let currentView = 'all';
 
 // Add new variable for carousel interval
 let carouselInterval = null;
+// Add a new variable to track if a popout window is already open
+let activePopoutWindow = null;
 
 // Initialize the application
 function init() {
@@ -452,56 +454,6 @@ function renderRecentGames() {
         playGame(game, index);
       }
     });
-
-    gamePopout.addEventListener('click', e => {
-      let inFrame;
-      try {
-        inFrame = window !== top;
-      } catch (e) {
-        inFrame = true;
-      }
-
-      // Only run if not already in an iframe and not Firefox
-      if (!navigator.userAgent.includes("Firefox")) {
-        const popup = window.open("about:blank", "_blank");
-
-        if (!popup || popup.closed) {
-          // alert removed
-        } else {
-          // Set title and favicon
-          popup.document.title = "Vortex - Game Popout";
-          const link = popup.document.createElement("link");
-          link.rel = "icon";
-          link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"; // Replace with your own if desired
-          popup.document.head.appendChild(link);
-
-          // Create and style iframe
-          const iframe = popup.document.createElement("iframe");
-          iframe.src = window.location.origin + game.path;
-          Object.assign(iframe.style, {
-            position: "fixed",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            margin: "0",
-            padding: "0",
-            border: "none",
-            outline: "none",
-            zIndex: "9999"
-          });
-
-          popup.document.body.style.margin = "0";
-          popup.document.body.appendChild(iframe);
-          gameOverlay.classList.add('closing');
-          setTimeout(() => {
-            gameOverlay.classList.remove('active');
-            gameOverlay.classList.remove('closing');
-            gameFrame.src = '';
-          }, 300);
-        }
-      }
-    });
     
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
@@ -563,14 +515,24 @@ function playGame(game, index) {
   setupGamePopout(game);
 }
 
-// New function to set up game popout
+// Improved function to set up game popout
 function setupGamePopout(game) {
   // Remove any existing event listener to prevent duplicates
-  gamePopout.replaceWith(gamePopout.cloneNode(true));
-  // Get the fresh reference to the button
   const freshGamePopout = document.getElementById('popout-game');
+  const newGamePopout = freshGamePopout.cloneNode(true);
+  freshGamePopout.parentNode.replaceChild(newGamePopout, freshGamePopout);
   
-  freshGamePopout.addEventListener('click', () => {
+  // Add event listener to the new button
+  newGamePopout.addEventListener('click', () => {
+    // Close any existing popout window first
+    if (activePopoutWindow && !activePopoutWindow.closed) {
+      try {
+        activePopoutWindow.close();
+      } catch (e) {
+        console.log("Could not close previous popup:", e);
+      }
+    }
+    
     let inFrame;
     try {
       inFrame = window !== top;
@@ -583,9 +545,11 @@ function setupGamePopout(game) {
       const popup = window.open("about:blank", "_blank");
 
       if (!popup || popup.closed) {
-        // Popup was blocked or failed to open
         console.log("Popup was blocked");
       } else {
+        // Store reference to this window
+        activePopoutWindow = popup;
+        
         // Set title and favicon
         popup.document.title = `Vortex - ${game.name}`;
         const link = popup.document.createElement("link");
@@ -612,6 +576,15 @@ function setupGamePopout(game) {
 
         popup.document.body.style.margin = "0";
         popup.document.body.appendChild(iframe);
+        
+        // Track when the popup is closed
+        popup.addEventListener('unload', () => {
+          if (activePopoutWindow === popup) {
+            activePopoutWindow = null;
+          }
+        });
+        
+        // Close the overlay
         gameOverlay.classList.add('closing');
         setTimeout(() => {
           gameOverlay.classList.remove('active');
@@ -808,8 +781,6 @@ function updateCarousel() {
 function renderFavoriteGames() {
   gameList.setAttribute('data-size', thumbnailSize.value);
   const favoriteGames = games.filter(game => favorites.includes(game.id));
-  
-  
   
   renderGames(favoriteGames);
 }
