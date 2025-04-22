@@ -744,14 +744,10 @@ function updateCarousel() {
 
 // New function to render favorite games
 function renderFavoriteGames() {
-  currentView = 'favorites';
   gameList.setAttribute('data-size', thumbnailSize.value);
   const favoriteGames = games.filter(game => favorites.includes(game.id));
   
-  if (favoriteGames.length === 0) {
-    gameList.innerHTML = '<p class="empty-state">No favorite games yet</p>';
-    return;
-  }
+  
   
   renderGames(favoriteGames);
 }
