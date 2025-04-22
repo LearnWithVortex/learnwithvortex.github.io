@@ -17,7 +17,7 @@
     "path": "/g/pt/",
     "logo": "/g/pt/pt.jpg",
     "featured": true,
-    "rating": 4.0
+    "rating": 5.0
     },
     {
         "name": "Geometry Dash",
@@ -37,6 +37,86 @@
             "path": "/g/drivemad/",
             "logo": "/g/drivemad/webapp/cover.jpg",
             "featured": true,
+            "rating": 4.0
+            },
+             {
+            "name": "2048",
+            "id": "2048",
+            "discription": "Join the tiles and reach 2048! Experience this popular and addictive puzzle game. Slide the tiles to combine them and create larger numbers. Can you reach the elusive 2048 tile?",
+            "category": "Puzzle",
+            "path": "/g/2048/",
+            "logo": "/g/2048/image.png",
+            "featured": false,
             "rating": 3.0
-            }
-]
+            },
+            {
+                "name": "Among Us",
+                "id": "Among Us",
+                "discription": "Among Us is a free space-themed online game where up to 15 players play together and are assigned the roles of 'Crewmate' or 'Imposter'. The aim of the game is for the crewmates to identify the players who are the imposters before the imposters can secretly sabotage their tasks and individually kill the crewmates.",
+                "category": "Party social deduction",
+                "path": "/g/Among-Us/",
+                "logo": "/g/Amoung-Us/image.png",
+                "featured": false,
+                "rating": 3.0
+                },
+                {
+                    "name": "Angry Sharks",
+                    "id": "Angry Sharks",
+                    "discription": "become the ultimate predator in this offline shark game where you'll rule the ocean and eat your way through an underwater world of adventure.",
+                    "category": "Action",
+                    "path": "/g/AngrySharks/",
+                    "logo": "/g/AngrySharks/image.png",
+                    "featured": false,
+                    "rating": 1.0
+                    },
+                    {
+                        "name": "Awesome Tanks",
+                        "id": "Awesome tanks",
+                        "discription": "Smash enemy tanks, destroy bosses, find secret rooms full of bonuses. Create your own levels in Level Editor and share them with the world. Collect coins to upgrade your tank's stats, purchase and improve weapons. Earn multiple achievements.",
+                        "category": "Shooter",
+                        "path": "/g/AwesomeTanks/",
+                        "logo": "/g/AwesomeTanks/image.png",
+                        "featured": false,
+                        "rating": 3.0
+                        },
+                        {
+                            "name": "Ballistic Chicken",
+                            "id": "BC",
+                            "discription": "Ballistic Chicken is a quirky and fun physics-based game where you launch chickens out of a cannon and try to get them to fly as far as possible..",
+                            "category": "Action Shooter",
+                            "path": "/g/BallisticChickens/",
+                            "logo": "/g/BallisticChickens/logo.png",
+                            "featured": false,
+                            "rating": 3.0
+                            },
+                            {
+                                "name": "Basketball Random",
+                                "id": "BR",
+                                "discription": "Basket Random is an entertaining and quirky basketball game known for its unpredictable physics and random gameplay elements",
+                                "category": "Action Shooter",
+                                "path": "/g/Basketball-random/",
+                                "logo": "/g/Basketball-random/splash.jpeg",
+                                "featured": false,
+                                "rating": 4.5
+                                },
+                                {
+                                    "name": "Basketball Bros",
+                                    "id": "BBB",
+                                    "discription": "a fast-paced, one-on-one basketball game featuring a variety of playable characters, each with unique skills and moves",
+                                    "category": "Action & adventure",
+                                    "path": "/g/Basketbros/",
+                                    "logo": "/g/Basketbros/thumb.jpg",
+                                    "featured": false,
+                                    "rating": 3.5
+                                    },
+                                    {
+                                        "name": "Bitlife",
+                                        "id": "BL",
+                                        "discription": "a text-based life simulation game that allows players to make choices and experience a virtual life",
+                                        "category": "Life Simulation",
+                                        "path": "/g/Bitlife/",
+                                        "logo": "/g/Bitlife/splash.png",
+                                        "featured": true,
+                                        "rating": 3.5
+                                        }
+    ]
