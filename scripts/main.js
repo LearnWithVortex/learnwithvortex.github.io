@@ -1,4 +1,3 @@
-
 // DOM Elements
 const loadingScreen = document.querySelector('.loading-screen');
 const timeDisplay = document.getElementById('time');
@@ -559,6 +558,69 @@ function playGame(game, index) {
   // Save to recently played
   saveRecentGame(game.id);
   renderRecentGames();
+  
+  // Set up the popup functionality to use the current game
+  setupGamePopout(game);
+}
+
+// New function to set up game popout
+function setupGamePopout(game) {
+  // Remove any existing event listener to prevent duplicates
+  gamePopout.replaceWith(gamePopout.cloneNode(true));
+  // Get the fresh reference to the button
+  const freshGamePopout = document.getElementById('popout-game');
+  
+  freshGamePopout.addEventListener('click', () => {
+    let inFrame;
+    try {
+      inFrame = window !== top;
+    } catch (e) {
+      inFrame = true;
+    }
+
+    // Only run if not already in an iframe and not Firefox
+    if (!navigator.userAgent.includes("Firefox")) {
+      const popup = window.open("about:blank", "_blank");
+
+      if (!popup || popup.closed) {
+        // Popup was blocked or failed to open
+        console.log("Popup was blocked");
+      } else {
+        // Set title and favicon
+        popup.document.title = `Vortex - ${game.name}`;
+        const link = popup.document.createElement("link");
+        link.rel = "icon";
+        link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png";
+        popup.document.head.appendChild(link);
+
+        // Create and style iframe
+        const iframe = popup.document.createElement("iframe");
+        // Use the current game's path
+        iframe.src = window.location.origin + game.path;
+        Object.assign(iframe.style, {
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100%",
+          height: "100%",
+          margin: "0",
+          padding: "0",
+          border: "none",
+          outline: "none",
+          zIndex: "9999"
+        });
+
+        popup.document.body.style.margin = "0";
+        popup.document.body.appendChild(iframe);
+        gameOverlay.classList.add('closing');
+        setTimeout(() => {
+          gameOverlay.classList.remove('active');
+          gameOverlay.classList.remove('closing');
+          gameFrame.src = '';
+        }, 300);
+      }
+    }
+  });
 }
 
 // Toggle a game as favorite
