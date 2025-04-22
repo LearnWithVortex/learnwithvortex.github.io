@@ -1,3 +1,4 @@
+
 // DOM Elements
 const loadingScreen = document.querySelector('.loading-screen');
 const timeDisplay = document.getElementById('time');
@@ -124,12 +125,10 @@ function setupEventListeners() {
   settingsBtn.addEventListener('click', () => {
     settingsPanel.classList.add('active');
     applySettings();
-   // playSfx('click');
   });
   
   closeSettings.addEventListener('click', () => {
     settingsPanel.classList.remove('active');
-  //  playSfx('click');
   });
   
   // Game overlay
@@ -177,7 +176,6 @@ function setupEventListeners() {
   // Favorites button
   favoritesBtn.addEventListener('click', () => {
     toggleActiveButton(favoritesBtn);
-    //currentView = 'favorites';
     renderFavoriteGames();
   });
   
@@ -227,12 +225,10 @@ function setupEventListeners() {
   // Settings
   thumbnailSize.addEventListener('change', saveSettings);
 
-  // NEW SETTING TOGGLES
   toggleDarkmode.addEventListener('change', () => {
     saveSettings();
-   // playSfx('click');
   });
-  toggleSfx.addEventListener('change', saveSettings);
+  
   toggleCompact.addEventListener('change', saveSettings);
   
   // Clear history and favorites
@@ -245,39 +241,6 @@ function setupEventListeners() {
     localStorage.removeItem('favorites');
     favorites = [];
     renderGames(games);
-  });
-  
-  // Carousel controls with improved animation
-  carouselPrev.addEventListener('click', () => {
-    carouselContainer.classList.add('transition-left');
-    setTimeout(() => {
-      carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
-      updateCarousel();
-      carouselContainer.classList.remove('transition-left');
-    }, 300);
-  });
-  
-  carouselNext.addEventListener('click', () => {
-    carouselContainer.classList.add('transition-right');
-    setTimeout(() => {
-      carouselIndex = (carouselIndex + 1) % featuredGames.length;
-      updateCarousel();
-      carouselContainer.classList.remove('transition-right');
-    }, 300);
-  });
-  
-  // Add page transition for navigation links
-  document.querySelectorAll('a[href="form.html"]').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const href = this.getAttribute('href');
-      
-      document.body.classList.add('page-transition');
-      
-      setTimeout(() => {
-        window.location.href = href;
-      }, 500);
-    });
   });
   
   // Fullscreen game button
@@ -331,11 +294,6 @@ function toggleFullscreen() {
 function applySettings() {
   const settings = JSON.parse(localStorage.getItem('settings') || '{}');
 
-  // Animations toggle
-  if (settings.animations !== undefined) {
-    toggleAnimations.checked = settings.animations;
-    document.body.classList.toggle('no-animations', !settings.animations);
-  }
   // Thumbnail size
   if (settings.thumbnailSize) {
     thumbnailSize.value = settings.thumbnailSize;
@@ -348,8 +306,6 @@ function applySettings() {
     toggleDarkmode.checked = !!settings.darkmode;
     document.body.classList.toggle('dark-mode', !!settings.darkmode);
   }
-  // SFX
-
   // Compact View
   if (settings.compact !== undefined) {
     toggleCompact.checked = !!settings.compact;
@@ -499,57 +455,54 @@ function renderRecentGames() {
     });
 
     gamePopout.addEventListener('click', e => {
-  let inFrame;
-  try {
-    inFrame = window !== top;
-  } catch (e) {
-    inFrame = true;
-  }
+      let inFrame;
+      try {
+        inFrame = window !== top;
+      } catch (e) {
+        inFrame = true;
+      }
 
-  // Only run if not already in an iframe and not Firefox
-  if (!navigator.userAgent.includes("Firefox")) {
-    const popup = window.open("about:blank", "_blank");
+      // Only run if not already in an iframe and not Firefox
+      if (!navigator.userAgent.includes("Firefox")) {
+        const popup = window.open("about:blank", "_blank");
 
-    if (!popup || popup.closed) {
-     // alert("Please allow popups and redirects for popping out games to work.");
-    } else {
-      // Set title and favicon
-      popup.document.title = "Vortex - Game Popout";
-      const link = popup.document.createElement("link");
-      link.rel = "icon";
-      link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"; // Replace with your own if desired
-      popup.document.head.appendChild(link);
+        if (!popup || popup.closed) {
+          // alert removed
+        } else {
+          // Set title and favicon
+          popup.document.title = "Vortex - Game Popout";
+          const link = popup.document.createElement("link");
+          link.rel = "icon";
+          link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"; // Replace with your own if desired
+          popup.document.head.appendChild(link);
 
-      // Create and style iframe
-      const iframe = popup.document.createElement("iframe");
-      iframe.src = window.location.origin + game.path;
-      Object.assign(iframe.style, {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100%",
-        height: "100%",
-        margin: "0",
-        padding: "0",
-        border: "none",
-        outline: "none",
-        zIndex: "9999"
-      });
+          // Create and style iframe
+          const iframe = popup.document.createElement("iframe");
+          iframe.src = window.location.origin + game.path;
+          Object.assign(iframe.style, {
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            margin: "0",
+            padding: "0",
+            border: "none",
+            outline: "none",
+            zIndex: "9999"
+          });
 
-      popup.document.body.style.margin = "0";
-      popup.document.body.appendChild(iframe);
-      gameOverlay.classList.add('closing');
-    setTimeout(() => {
-      gameOverlay.classList.remove('active');
-      gameOverlay.classList.remove('closing');
-      gameFrame.src = '';
-    }, 300);
-      // Optional redirect of original tab
-      // location.replace("https://www.google.com");
-    }
-  }
-});
-
+          popup.document.body.style.margin = "0";
+          popup.document.body.appendChild(iframe);
+          gameOverlay.classList.add('closing');
+          setTimeout(() => {
+            gameOverlay.classList.remove('active');
+            gameOverlay.classList.remove('closing');
+            gameFrame.src = '';
+          }, 300);
+        }
+      }
+    });
     
     // Favorite button click
     const favoriteBtn = gameCard.querySelector('.favorite-btn');
@@ -666,6 +619,11 @@ function toggleActiveButton(button) {
 function setupCarousel() {
   carouselContainer.innerHTML = '';
   carouselDots.innerHTML = '';
+  
+  if (!featuredGames || featuredGames.length === 0) {
+    console.log("No featured games available for carousel");
+    return;
+  }
 
   featuredGames.forEach((game, index) => {
     const maxLength = 120;
@@ -715,7 +673,7 @@ function setupCarousel() {
     const playBtn = document.createElement('button');
     playBtn.className = 'carousel-btn';
     playBtn.textContent = 'Play Now';
-    // This is the fix: play the game actually being shown in the carousel, at current carouselIndex
+    
     playBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       // Always play current visible featured game
@@ -766,6 +724,10 @@ function startCarouselAutoRotation() {
 
 // Update the carousel position and active dot with improved animation
 function updateCarousel() {
+  if (!featuredGames || featuredGames.length === 0) {
+    return;
+  }
+  
   carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
   
   const dots = carouselDots.querySelectorAll('.carousel-dot');
@@ -782,8 +744,15 @@ function updateCarousel() {
 
 // New function to render favorite games
 function renderFavoriteGames() {
+  currentView = 'favorites';
   gameList.setAttribute('data-size', thumbnailSize.value);
   const favoriteGames = games.filter(game => favorites.includes(game.id));
+  
+  if (favoriteGames.length === 0) {
+    gameList.innerHTML = '<p class="empty-state">No favorite games yet</p>';
+    return;
+  }
+  
   renderGames(favoriteGames);
 }
 
@@ -796,34 +765,26 @@ document.addEventListener('fullscreenchange', () => {
   }
 });
 
-// Add new function for carousel auto-rotation
-function startCarouselAutoRotation() {
-  // Clear any existing interval
-  if (carouselInterval) {
-    clearInterval(carouselInterval);
-  }
-
-  // Rotate every 5 seconds
-  carouselInterval = setInterval(() => {
-    carouselContainer.classList.add('transition-right');
-    setTimeout(() => {
-      carouselIndex = (carouselIndex + 1) % featuredGames.length;
-      updateCarousel();
-      carouselContainer.classList.remove('transition-right');
-    }, 300);
-  }, 5000);
-}
-
 // Update event listeners in setupCarousel to pause on interaction
 function setupCarouselControls() {
+  if (!carouselPrev || !carouselNext) {
+    console.log("Carousel controls not found");
+    return;
+  }
+
   carouselPrev.addEventListener('click', () => {
     // Clear interval on manual navigation
     if (carouselInterval) {
       clearInterval(carouselInterval);
     }
+    
+    if (!featuredGames || featuredGames.length === 0) {
+      return;
+    }
+    
     carouselContainer.classList.add('transition-left');
     setTimeout(() => {
-      // FIX: Use precise calculation to avoid skipping
+      // Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex - 1 + featuredGames.length) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-left');
@@ -835,9 +796,14 @@ function setupCarouselControls() {
     if (carouselInterval) {
       clearInterval(carouselInterval);
     }
+    
+    if (!featuredGames || featuredGames.length === 0) {
+      return;
+    }
+    
     carouselContainer.classList.add('transition-right');
     setTimeout(() => {
-      // FIX: Use precise calculation to avoid skipping
+      // Use precise calculation to avoid skipping
       carouselIndex = (carouselIndex + 1) % featuredGames.length;
       updateCarousel();
       carouselContainer.classList.remove('transition-right');
@@ -867,4 +833,3 @@ thumbnailSize.addEventListener('change', () => {
 
 // Initialize the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
-
