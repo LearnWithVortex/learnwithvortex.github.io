@@ -100,15 +100,12 @@ scene("menu", () => {
   });
 
   onClick("clickable", (b) => {
-    if (window.self == window.top) {
-      fadeOut();
-      setTimeout(() => {
-        go(b.goTo);
-      }, FADE_TIME);
-    } else {
-      window.open("https://Ballistic-Chickens.mrvoo.repl.co", "_blank");
-    }
-  });
+  fadeOut();
+  setTimeout(() => {
+    go(b.goTo);
+  }, FADE_TIME);
+});
+
 
   function newCloud(p) {
     add([
