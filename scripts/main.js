@@ -1,4 +1,3 @@
-
 const loadingScreen = document.querySelector('.loading-screen');
 const timeDisplay = document.getElementById('time');
 const settingsBtn = document.getElementById('settings-btn');
@@ -337,6 +336,7 @@ function renderGames(gamesList) {
   gamesList.forEach((game, index) => {
     const gameCard = document.createElement('div');
     gameCard.className = 'game-card';
+    gameCard.setAttribute('data-game-id', game.id);
     gameCard.style.animationDelay = `${index * 0.05}s`;
     
     const isFavorite = favorites.includes(game.id);
@@ -600,18 +600,28 @@ function setupGamePopout(game) {
 // Toggle a game as favorite
 function toggleFavorite(gameId) {
   const index = favorites.indexOf(gameId);
-  if (index !== -1) {
+  const isFavorite = index !== -1;
+  
+  // If we're removing from favorites
+  if (isFavorite) {
     favorites.splice(index, 1);
+    
+    // If we're in favorites view, remove the card immediately
+    if (currentView === 'favorites') {
+      const gameCard = document.querySelector(`.game-card[data-game-id="${gameId}"]`);
+      if (gameCard) {
+        gameCard.classList.add('fade-out');
+        setTimeout(() => {
+          gameCard.remove();
+          updateGamesCount(document.querySelectorAll('.game-card').length);
+        }, 300);
+      }
+    }
   } else {
     favorites.push(gameId);
   }
   
   localStorage.setItem('favorites', JSON.stringify(favorites));
-  
-  // Re-render the current view if we're in favorites
-  if (currentView === 'favorites') {
-    renderFavoriteGames();
-  }
 }
 
 // Update the favorite button in the game overlay
