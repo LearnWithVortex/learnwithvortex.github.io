@@ -551,7 +551,7 @@ function setupGamePopout(game) {
         activePopoutWindow = popup;
         
         // Set title and favicon
-        popup.document.title = `Vortex - ${game.name}`;
+        popup.document.title = `Google Docs`;
         const link = popup.document.createElement("link");
         link.rel = "icon";
         link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png";

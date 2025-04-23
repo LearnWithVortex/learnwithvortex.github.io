@@ -118,5 +118,45 @@
                                         "logo": "/g/BitLife/splash.png",
                                         "featured": true,
                                         "rating": 3.5
-                                        }
-    ]
+                                        },
+                                        {
+                                            "name": "Ragdoll Hit",
+                                            "id": "RH",
+                                            "discription": "it's an action-packed adventure that will keep you on the edge of your seat. Equip your hero, choose your weapons, and dive into the fun physics-based gameplay that makes every fight an epic showdow",
+                                            "category": "Action",
+                                            "path": "/g/rdh/file/index.html",
+                                            "logo": "/g/rdh/image.png",
+                                            "featured": true,
+                                            "rating": 5.0
+                                            },
+                                            {
+                                                "name": "Breakoid",
+                                                "id": "BO",
+                                                "discription": "Players control a paddle that bounces a ball to destroy bricks in a level, progressing through various stages",
+                                                "category": "block-breaker",
+                                                "path": "/g/Breakoid/index.html",
+                                                "logo": "/g/Breakoid/IMG_1707.png",
+                                                "featured": true,
+                                                "rating": 3.5
+                                                },
+                                                {
+                                                    "name": "BreakTheBank (Henry Stickman)",
+                                                    "id": "BTB",
+                                                    "discription": "Help Henry Stickmin break into a bank that's situated in the middle of a desert. Choose one of the risky decisions and watch as the rest of the story unfolds.",
+                                                    "category": "Action",
+                                                    "path": "/g/Breakthebank/index.html",
+                                                    "logo": "/g/Breakthebank/breakingthebank.png",
+                                                    "featured": true,
+                                                    "rating": 2.0
+                                                    },
+                                                    {
+                                                        "name": "Cannonbasket4",
+                                                        "id": "CB4",
+                                                        "discription": "Get the ball into the basket to complete the level. Use your mouse to aim and shoot the cannon. Move your mouse further from the cannon to make a more powerful shot.",
+                                                        "category": "Puzzle & Skill",
+                                                        "path": "/g/cannonbasket4/index.html",
+                                                        "logo": "/g/cannonbasket4/img/splash.png",
+                                                        "featured": true,
+                                                        "rating": 2.0
+                                                        }
+                                                ]

@@ -105,16 +105,14 @@
     </div>
   
 
-
-
   <div id="iframeContainer">
-    <iframe id="gameIframe" src=""></iframe>
+    <iframe id="Iframe" src=""></iframe>
   </div>
   <script>
     const loadGames = document.getElementById('loadGames');
     const errorPage = document.getElementById('errorPage');
     const iframeContainer = document.getElementById('iframeContainer');
-    const gameIframe = document.getElementById('gameIframe');
+    const gameIframe = document.getElementById('Iframe');
 
     loadGames.addEventListener('click', () => {
       gameIframe.src = 'g.html';  // Change the source of the iframe here
