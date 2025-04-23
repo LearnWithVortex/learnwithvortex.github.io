@@ -176,12 +176,14 @@ function setupEventListeners() {
   // Favorites button
   favoritesBtn.addEventListener('click', () => {
     toggleActiveButton(favoritesBtn);
+    currentView = 'favorites';
     renderFavoriteGames();
   });
   
   // Recent games button
   recentBtn.addEventListener('click', () => {
     toggleActiveButton(recentBtn);
+    currentView = 'all';
     renderGames(games);
   });
   
@@ -386,7 +388,21 @@ function renderGames(gamesList) {
       e.stopPropagation();
       toggleFavorite(game.id);
       
-      if (currentView !== 'favorites') {
+      if (currentView === 'favorites') {
+        // If in favorites view and unfavoriting, remove the card with animation
+        if (favorites.includes(game.id)) {
+          favoriteBtn.classList.add('active');
+          favoriteBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
+        } else {
+          // Apply fade-out animation before removing
+          gameCard.classList.add('fade-out');
+          setTimeout(() => {
+            gameCard.remove();
+            updateGamesCount(document.querySelectorAll('.game-card').length);
+          }, 300);
+        }
+      } else {
+        // Normal behavior for other views
         if (favorites.includes(game.id)) {
           favoriteBtn.classList.add('active');
           favoriteBtn.innerHTML = '<i class="fa-solid fa-heart"></i>';
