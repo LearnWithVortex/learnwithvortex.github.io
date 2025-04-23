@@ -1,3 +1,4 @@
+
 const loadingScreen = document.querySelector('.loading-screen');
 const timeDisplay = document.getElementById('time');
 const settingsBtn = document.getElementById('settings-btn');
@@ -176,14 +177,12 @@ function setupEventListeners() {
   // Favorites button
   favoritesBtn.addEventListener('click', () => {
     toggleActiveButton(favoritesBtn);
-    currentView = 'favorites';
     renderFavoriteGames();
   });
   
   // Recent games button
   recentBtn.addEventListener('click', () => {
     toggleActiveButton(recentBtn);
-    currentView = 'all';
     renderGames(games);
   });
   
@@ -332,12 +331,12 @@ function saveSettings() {
 function renderGames(gamesList) {
   updateGamesCount(gamesList.length);
   gameList.innerHTML = '';
+  // Set data-size property for correct thumbnail
   gameList.setAttribute('data-size', thumbnailSize.value);
   
   gamesList.forEach((game, index) => {
     const gameCard = document.createElement('div');
     gameCard.className = 'game-card';
-    gameCard.setAttribute('data-game-id', game.id);
     gameCard.style.animationDelay = `${index * 0.05}s`;
     
     const isFavorite = favorites.includes(game.id);
@@ -598,44 +597,188 @@ function setupGamePopout(game) {
   });
 }
 
-// Update the toggleFavorite function to handle removal in favorites view
+// Toggle a game as favorite
 function toggleFavorite(gameId) {
   const index = favorites.indexOf(gameId);
   if (index !== -1) {
     favorites.splice(index, 1);
-    
-    // If we're in favorites view, remove the game card immediately
-    if (currentView === 'favorites') {
-      const gameCard = document.querySelector(`.game-card[data-game-id="${gameId}"]`);
-      if (gameCard) {
-        gameCard.remove();
-        // Update games count
-        const currentGames = document.querySelectorAll('.game-card').length;
-        updateGamesCount(currentGames);
-      }
-    }
   } else {
     favorites.push(gameId);
   }
   
   localStorage.setItem('favorites', JSON.stringify(favorites));
+  
+  // Re-render the current view if we're in favorites
+  if (currentView === 'favorites') {
+    renderFavoriteGames();
+  }
 }
 
-// Update favorites button click handler
-favoritesBtn.addEventListener('click', () => {
-  toggleActiveButton(favoritesBtn);
-  currentView = 'favorites';
-  renderFavoriteGames();
-});
+// Update the favorite button in the game overlay
+function updateFavoriteButton(gameId) {
+  const isFavorite = favorites.includes(gameId);
+  favoriteGame.innerHTML = `<i class="fa-${isFavorite ? 'solid' : 'regular'} fa-heart"></i>`;
+}
 
-// Update recent button click handler
-recentBtn.addEventListener('click', () => {
-  toggleActiveButton(recentBtn);
-  currentView = 'all';
-  renderGames(games);
-});
+// Save a game to recently played
+function saveRecentGame(gameId) {
+  let recentGames = JSON.parse(localStorage.getItem('recentlyPlayed') || '[]');
+  
+  // Remove if already exists
+  recentGames = recentGames.filter(id => id !== gameId);
+  
+  // Add to the beginning
+  recentGames.unshift(gameId);
+  
+  // Limit to 10 recent games
+  if (recentGames.length > 10) {
+    recentGames = recentGames.slice(0, 10);
+  }
+  
+  localStorage.setItem('recentlyPlayed', JSON.stringify(recentGames));
+}
 
-// Improved function to render favorite games
+// Toggle active state on action buttons with animation
+function toggleActiveButton(button) {
+  const allButtons = document.querySelectorAll('.action-btn');
+  allButtons.forEach(btn => {
+    if (btn === button) {
+      btn.classList.add('active');
+      btn.classList.add('pulse-once');
+      setTimeout(() => btn.classList.remove('pulse-once'), 500);
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function setupCarousel() {
+  carouselContainer.innerHTML = '';
+  carouselDots.innerHTML = '';
+  
+  if (!featuredGames || featuredGames.length === 0) {
+    console.log("No featured games available for carousel");
+    return;
+  }
+
+  featuredGames.forEach((game, index) => {
+    const maxLength = 120;
+    const fullDesc = game.discription || `Experience the excitement of ${game.name}. One of our most popular ${game.category} games!`;
+    const isLong = fullDesc.length > maxLength;
+    const shortDesc = fullDesc.slice(0, maxLength) + (isLong ? '...' : '');
+
+    // Create carousel item
+    const carouselItem = document.createElement('div');
+    carouselItem.className = 'carousel-item';
+
+    const img = document.createElement('img');
+    img.src = game.logo;
+    img.alt = game.name;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'carousel-content';
+
+    const title = document.createElement('h2');
+    title.className = 'carousel-title';
+    title.textContent = game.name;
+
+    const desc = document.createElement('p');
+    desc.className = 'carousel-desc';
+    desc.innerHTML = `${shortDesc} ${isLong ? '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">Show More</span>' : ''}`;
+    desc.dataset.full = fullDesc;
+    desc.dataset.short = shortDesc;
+
+    if (isLong) {
+      desc.addEventListener('click', (e) => {
+        if (e.target.classList.contains('show-more-btn')) {
+          const isExpanded = e.target.textContent.trim() === 'Show Less';
+
+          // Replace with the correct content
+          desc.innerHTML =
+            (isExpanded ? desc.dataset.short : desc.dataset.full) +
+            '<span class="show-more-btn" style="color: #4fc3f7; cursor: pointer; margin-left: 10px; font-weight: 500;">' +
+            (isExpanded ? 'Show More' : 'Show Less') +
+            '</span>';
+        }
+      });
+    }
+
+    contentDiv.appendChild(title);
+    contentDiv.appendChild(desc);
+
+    const playBtn = document.createElement('button');
+    playBtn.className = 'carousel-btn';
+    playBtn.textContent = 'Play Now';
+    
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Always play current visible featured game
+      const selectedGame = featuredGames[carouselIndex];
+      // Find index in full games list
+      const gamesListIndex = games.findIndex(g => g.id === selectedGame.id);
+      if (gamesListIndex !== -1) {
+        playGame(selectedGame, gamesListIndex);
+      }
+    });
+
+    contentDiv.appendChild(playBtn);
+    carouselItem.appendChild(img);
+    carouselItem.appendChild(contentDiv);
+    carouselContainer.appendChild(carouselItem);
+
+    // Create dot with click listener
+    const dot = document.createElement('div'); // using div for dot
+    dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+    dot.addEventListener('click', () => {
+      carouselIndex = index;
+      updateCarousel();
+    });
+    carouselDots.appendChild(dot);
+  });
+
+  // Start auto-rotation
+  startCarouselAutoRotation();
+}
+
+// Add new function for carousel auto-rotation
+function startCarouselAutoRotation() {
+  // Clear any existing interval
+  if (carouselInterval) {
+    clearInterval(carouselInterval);
+  }
+
+  // Rotate every 5 seconds
+  carouselInterval = setInterval(() => {
+    carouselContainer.classList.add('transition-right');
+    setTimeout(() => {
+      carouselIndex = (carouselIndex + 1) % featuredGames.length;
+      updateCarousel();
+      carouselContainer.classList.remove('transition-right');
+    }, 300);
+  }, 5000);
+}
+
+// Update the carousel position and active dot with improved animation
+function updateCarousel() {
+  if (!featuredGames || featuredGames.length === 0) {
+    return;
+  }
+  
+  carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
+  
+  const dots = carouselDots.querySelectorAll('.carousel-dot');
+  dots.forEach((dot, index) => {
+    if (index === carouselIndex) {
+      dot.classList.add('active');
+      dot.classList.add('pulse-once');
+      setTimeout(() => dot.classList.remove('pulse-once'), 500);
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+}
+
+// New function to render favorite games
 function renderFavoriteGames() {
   gameList.setAttribute('data-size', thumbnailSize.value);
   const favoriteGames = games.filter(game => favorites.includes(game.id));
