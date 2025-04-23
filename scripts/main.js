@@ -332,12 +332,12 @@ function saveSettings() {
 function renderGames(gamesList) {
   updateGamesCount(gamesList.length);
   gameList.innerHTML = '';
-  // Set data-size property for correct thumbnail
   gameList.setAttribute('data-size', thumbnailSize.value);
   
   gamesList.forEach((game, index) => {
     const gameCard = document.createElement('div');
     gameCard.className = 'game-card';
+    gameCard.setAttribute('data-game-id', game.id);
     gameCard.style.animationDelay = `${index * 0.05}s`;
     
     const isFavorite = favorites.includes(game.id);
@@ -603,16 +603,22 @@ function toggleFavorite(gameId) {
   const index = favorites.indexOf(gameId);
   if (index !== -1) {
     favorites.splice(index, 1);
+    
+    // If we're in favorites view, remove the game card immediately
+    if (currentView === 'favorites') {
+      const gameCard = document.querySelector(`.game-card[data-game-id="${gameId}"]`);
+      if (gameCard) {
+        gameCard.remove();
+        // Update games count
+        const currentGames = document.querySelectorAll('.game-card').length;
+        updateGamesCount(currentGames);
+      }
+    }
   } else {
     favorites.push(gameId);
   }
   
   localStorage.setItem('favorites', JSON.stringify(favorites));
-  
-  // Re-render only if we're in favorites view
-  if (currentView === 'favorites') {
-    renderFavoriteGames();
-  }
 }
 
 // Update favorites button click handler
