@@ -30,6 +30,7 @@ const viewBtns = document.querySelectorAll('.view-btn');
 const viewAllRecent = document.getElementById('view-all-recent');
 const toggleDarkmode = document.getElementById('toggle-darkmode');
 const toggleCompact = document.getElementById('toggle-compact');
+const gamesCountSpan = document.getElementById('games-count');
 
 // Game data
 let games = [];
@@ -105,18 +106,17 @@ async function loadGames() {
     renderRecentGames();
     setupCarousel();
 
-    // Add staggered animation to game cards
-    setTimeout(() => {
-      const gameCards = document.querySelectorAll('.game-card');
-      gameCards.forEach((card, index) => {
-        setTimeout(() => {
-          card.classList.add('appear');
-        }, index * 50);
-      });
-    }, 300);
-
+    // Update games count
+    updateGamesCount(games.length);
   } catch (error) {
     console.error('Error loading games:', error);
+  }
+}
+
+// Helper function to update games count
+function updateGamesCount(count) {
+  if (gamesCountSpan) {
+    gamesCountSpan.textContent = `(${count})`;
   }
 }
 
@@ -329,6 +329,7 @@ function saveSettings() {
 
 // Render all games in the game list with improved animation
 function renderGames(gamesList) {
+  updateGamesCount(gamesList.length);
   gameList.innerHTML = '';
   // Set data-size property for correct thumbnail
   gameList.setAttribute('data-size', thumbnailSize.value);
@@ -781,7 +782,7 @@ function updateCarousel() {
 function renderFavoriteGames() {
   gameList.setAttribute('data-size', thumbnailSize.value);
   const favoriteGames = games.filter(game => favorites.includes(game.id));
-  
+  updateGamesCount(favoriteGames.length);
   renderGames(favoriteGames);
 }
 
