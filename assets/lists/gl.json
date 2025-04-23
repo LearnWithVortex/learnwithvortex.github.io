@@ -36,7 +36,7 @@
             "category": "Action",
             "path": "/g/drivemad/",
             "logo": "/g/drivemad/webapp/cover.jpg",
-            "featured": true,
+            "featured": false,
             "rating": 4.0
             },
              {
@@ -136,7 +136,7 @@
                                                 "category": "block-breaker",
                                                 "path": "/g/Breakoid/index.html",
                                                 "logo": "/g/Breakoid/IMG_1707.png",
-                                                "featured": true,
+                                                "featured": false,
                                                 "rating": 3.5
                                                 },
                                                 {
@@ -146,7 +146,7 @@
                                                     "category": "Action",
                                                     "path": "/g/Breakthebank/index.html",
                                                     "logo": "/g/Breakthebank/breakingthebank.png",
-                                                    "featured": true,
+                                                    "featured": false,
                                                     "rating": 2.0
                                                     },
                                                     {
@@ -156,7 +156,7 @@
                                                         "category": "Puzzle & Skill",
                                                         "path": "/g/cannonbasket4/index.html",
                                                         "logo": "/g/cannonbasket4/img/splash.png",
-                                                        "featured": true,
+                                                        "featured": false,
                                                         "rating": 2.0
                                                         }
                                                 ]
