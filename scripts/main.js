@@ -1,4 +1,4 @@
-// DOM Elements
+
 const loadingScreen = document.querySelector('.loading-screen');
 const timeDisplay = document.getElementById('time');
 const settingsBtn = document.getElementById('settings-btn');
