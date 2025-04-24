@@ -158,5 +158,15 @@
                                                         "logo": "/g/cannonbasket4/img/splash.png",
                                                         "featured": false,
                                                         "rating": 2.0
+                                                        },
+                                                        {
+                                                            "name": "Champion Island",
+                                                            "id": "CI",
+                                                            "discription": "-",
+                                                            "category": "Puzzle & Skill",
+                                                            "path": "/g/championisland/index.html",
+                                                            "logo": "/g/championisland/IMG_4648.jpeg",
+                                                            "featured": false,
+                                                            "rating": 1.5                                                            
                                                         }
-                                                ]
+                                                      ]

@@ -194,6 +194,12 @@ function setupEventListeners() {
       if (link.getAttribute('href') === 'form.html') {
         return;
       }
+
+      if (link.getAttribute('href') === 'm.html') {
+        return;
+      }
+
+      
       
       e.preventDefault();
       navLinks.forEach(l => l.classList.remove('active'));
