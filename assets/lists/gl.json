@@ -169,13 +169,24 @@
                                                             "featured": false,
                                                             "rating": 2.5                                                            
                                                         },
-       {
+                                                        {
                                                             "name": "Territorial.io",
                                                             "id": "CI",
                                                             "discription": "-",
                                                             "category": "Action",
                                                             "path": "/g/Territorial.io/index.html",
                                                             "logo": "/g/Territorial.io/IMG_2918.png",
+                                                            "featured": false,
+                                                            "rating": 4.5                                                        
+                                                        },
+                                                        {
+             
+                                                            "name": "Creative Kill Chamber",
+                                                            "id": "CKC",
+                                                            "discription": "-",
+                                                            "category": "Action",
+                                                            "path": "/g/ckc/index.html",
+                                                            "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png",
                                                             "featured": false,
                                                             "rating": 4.5                                                        
                                                         }
