@@ -167,6 +167,16 @@
                                                             "path": "/g/championisland/index.html",
                                                             "logo": "/g/championisland/IMG_4648.jpeg",
                                                             "featured": false,
-                                                            "rating": 1.5                                                            
+                                                            "rating": 2.5                                                            
+                                                        },
+       {
+                                                            "name": "Territorial.io",
+                                                            "id": "CI",
+                                                            "discription": "-",
+                                                            "category": "Action",
+                                                            "path": "/g/Territorial.io/index.html",
+                                                            "logo": "/g/Territorial.io/IMG_2918.png",
+                                                            "featured": false,
+                                                            "rating": 4.5                                                        
                                                         }
                                                       ]
