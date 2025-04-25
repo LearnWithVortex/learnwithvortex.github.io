@@ -195,7 +195,7 @@ function setupEventListeners() {
         return;
       }
 
-      if (link.getAttribute('href') === 'm.html') {
+      if (link.getAttribute('href') === 'choose.html') {
         return;
       }
 
