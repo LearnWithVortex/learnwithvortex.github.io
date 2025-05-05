@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,54 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-  <style>
-    /* Category selector styles */
-    .category-selector {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin: 20px auto;
-      max-width: 1200px;
-      padding: 0 20px;
-    }
-    
-    .category-btn {
-      background: rgba(22, 22, 35, 0.8);
-      color: #f1f1f1;
-      border: 1px solid rgba(108, 92, 231, 0.5);
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 500;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .category-btn:hover {
-      background: rgba(108, 92, 231, 0.3);
-      transform: translateY(-2px);
-    }
-    
-    .category-btn.active {
-      background: #6c5ce7;
-      color: white;
-      box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
-    }
-
-    @media (max-width: 768px) {
-      .category-selector {
-        padding: 0 10px;
-        gap: 5px;
-      }
-      
-      .category-btn {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="loading-screen">
@@ -120,11 +71,6 @@
         <i class="fa-solid fa-dice"></i>
         <span>Random Game</span>
       </button>
-    </section>
-
-    <!-- New Category Selector Section -->
-    <section class="category-selector" id="category-selector">
-      <!-- Categories will be inserted here by JavaScript -->
     </section>
 
     <div class="content-container">
@@ -249,78 +195,5 @@
   </footer>
 
   <script src="scripts/main.js"></script>
-  <script>
-    // Category filtering functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      // Load game data
-      fetch('assets/lists/gl.json')
-        .then(response => response.json())
-        .then(data => {
-          // Extract unique categories from all games
-          const categories = new Set();
-          data.forEach(game => {
-            if (game.category) {
-              categories.add(game.category);
-            }
-          });
-          
-          // Add "All" category
-          const categorySelector = document.getElementById('category-selector');
-          const allButton = document.createElement('button');
-          allButton.className = 'category-btn active';
-          allButton.setAttribute('data-category', 'all');
-          allButton.textContent = 'All Games';
-          categorySelector.appendChild(allButton);
-          
-          // Add other categories
-          Array.from(categories).sort().forEach(category => {
-            const button = document.createElement('button');
-            button.className = 'category-btn';
-            button.setAttribute('data-category', category);
-            button.textContent = category;
-            categorySelector.appendChild(button);
-          });
-          
-          // Add event listeners to category buttons
-          const categoryButtons = document.querySelectorAll('.category-btn');
-          categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-              // Remove active class from all buttons
-              categoryButtons.forEach(btn => btn.classList.remove('active'));
-              // Add active class to clicked button
-              button.classList.add('active');
-              
-              const selectedCategory = button.getAttribute('data-category');
-              
-              // Filter games based on selected category
-              const gameCards = document.querySelectorAll('#game-list .game-card');
-              gameCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
-                
-                if (selectedCategory === 'all' || cardCategory === selectedCategory) {
-                  // Show card with fade-in effect
-                  card.style.display = 'flex';
-                  card.style.opacity = '0';
-                  setTimeout(() => {
-                    card.style.opacity = '1';
-                  }, 10);
-                } else {
-                  // Hide card
-                  card.style.opacity = '0';
-                  setTimeout(() => {
-                    card.style.display = 'none';
-                  }, 300);
-                }
-              });
-              
-              // Update game count
-              const visibleGames = document.querySelectorAll('#game-list .game-card[style="display: flex; opacity: 1;"], #game-list .game-card:not([style])');
-              document.getElementById('games-count').textContent = `(${visibleGames.length})`;
-            });
-          });
-        })
-        .catch(error => console.error('Error loading game data:', error));
-    });
-  </script>
 </body>
 </html>
