@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vortex Media</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #6c5ce7;
@@ -25,7 +26,7 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Rajdhani', sans-serif;
       background: radial-gradient(circle at top, #1e1e30, var(--bg));
       color: var(--text);
       min-height: 100vh;
@@ -33,64 +34,119 @@
       padding-bottom: 60px;
     }
 
+    /* Loading screen styles */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s;
+    }
+
+    .loader {
+      position: relative;
+      text-align: center;
+    }
+
+    .loader-circle {
+      width: 80px;
+      height: 80px;
+      border: 4px solid rgba(108, 92, 231, 0.1);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    .loader-text {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: 3px;
+      color: var(--primary);
+      text-shadow: var(--glow);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Header styles */
     header {
       background: rgba(15, 15, 26, 0.8);
       backdrop-filter: blur(10px);
-      padding: 20px 0;
       position: sticky;
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    .header-content {
+    nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 15px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-right: 50px;
+    }
+
+    .logo-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      filter: blur(20px);
+      opacity: 0.3;
+      z-index: -1;
     }
 
     .logo {
-      font-size: 2.5rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
       font-weight: 700;
       color: var(--primary);
       text-shadow: var(--glow);
-      font-family: 'Montserrat', sans-serif;
       letter-spacing: 1px;
+      margin: 0;
     }
 
-    .logo span {
-      color: var(--accent);
-    }
-
-    nav ul {
+    .nav-menu {
       display: flex;
       list-style: none;
       gap: 25px;
     }
 
-    nav a {
+    .nav-link {
       color: var(--text);
       text-decoration: none;
       font-weight: 500;
       font-size: 1.1rem;
       transition: all 0.3s ease;
       position: relative;
+      padding: 5px 0;
     }
 
-    nav a:hover {
-      color: var(--primary);
-    }
-
-    nav a::after {
+    .nav-link::after {
       content: '';
       position: absolute;
-      bottom: -5px;
+      bottom: 0;
       left: 0;
       width: 0%;
       height: 2px;
@@ -98,30 +154,78 @@
       transition: width 0.3s ease;
     }
 
-    nav a:hover::after {
+    .nav-link:hover::after, .nav-link.active::after {
       width: 100%;
     }
 
-    .search-box {
+    .nav-link.active {
+      color: var(--primary);
+    }
+
+    .nav-right {
       display: flex;
       align-items: center;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50px;
-      padding: 8px 15px;
+      gap: 20px;
     }
 
-    .search-box input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      padding: 5px;
-      width: 200px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .search-box i {
+    .time-display {
+      font-family: 'Orbitron', sans-serif;
       color: var(--text-secondary);
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 5px 10px;
+      border-radius: 4px;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    #search {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50px;
+      color: var(--text);
+      padding: 8px 15px 8px 35px;
+      font-family: inherit;
+      width: 200px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    #search:focus {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 5px rgba(108, 92, 231, 0.5);
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .icon-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Content container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
     .hero {
@@ -135,7 +239,7 @@
       background: linear-gradient(90deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Orbitron', sans-serif;
     }
 
     .subheading {
@@ -144,6 +248,7 @@
       margin-bottom: 30px;
     }
 
+    /* Category selector */
     .category-selector {
       display: flex;
       justify-content: center;
@@ -175,6 +280,7 @@
       border-color: var(--primary);
     }
 
+    /* Section titles */
     .section-title {
       font-size: 1.8rem;
       margin: 40px 0 20px;
@@ -192,9 +298,10 @@
       margin-left: 20px;
     }
 
+    /* Media grid layout */
     .media-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 25px;
       margin-top: 20px;
     }
@@ -208,7 +315,7 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      height: 300px;
+      height: 340px;
     }
 
     .media-card:hover {
@@ -217,7 +324,7 @@
     }
 
     .media-card .poster {
-      height: 220px;
+      height: 260px;
       width: 100%;
       object-fit: cover;
     }
@@ -226,9 +333,10 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      max-width: 80px;
-      max-height: 40px;
-      filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+      max-width: 100px;
+      max-height: 50px;
+      filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
+      z-index: 2;
     }
 
     .media-info {
@@ -291,6 +399,7 @@
       justify-content: center;
       transition: all 0.3s ease;
       opacity: 0;
+      z-index: 3;
     }
 
     .media-card:hover .play-btn {
@@ -303,6 +412,7 @@
       font-size: 1.2rem;
     }
 
+    /* Media list display */
     .media-list {
       display: none;
       animation: fadeIn 0.5s ease-in-out forwards;
@@ -312,6 +422,7 @@
       display: block;
     }
 
+    /* Footer */
     footer {
       margin-top: 60px;
       padding: 20px 0;
@@ -320,63 +431,111 @@
       font-size: 0.9rem;
     }
 
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Responsive styles */
+    @media (max-width: 1024px) {
+      nav {
+        padding: 15px 20px;
+      }
+      
+      .logo-container {
+        margin-right: 30px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .header-content {
+      .nav-left {
         flex-direction: column;
+        align-items: flex-start;
         gap: 15px;
       }
       
-      nav ul {
+      .logo-container {
+        margin-right: 0;
+      }
+      
+      .nav-menu {
         gap: 15px;
       }
       
-      .search-box {
-        margin-top: 15px;
+      .nav-right {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .search-container {
+        width: 100%;
+      }
+      
+      #search {
+        width: 100%;
       }
       
       .media-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       }
       
       .media-card {
-        height: 250px;
+        height: 280px;
       }
       
       .media-card .poster {
-        height: 180px;
+        height: 200px;
       }
       
       h1 {
         font-size: 2.2rem;
       }
     }
+
+    @media (max-width: 480px) {
+      .media-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      
+      .category-selector {
+        flex-wrap: wrap;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="container">
-      <div class="header-content">
-        <div class="logo">VORTEX<span>.</span></div>
-        <nav>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="choose.html" class="active">Browse</a></li>
-            <li><a href="g.html">Games</a></li>
-            <li><a href="form.html">Contact</a></li>
-          </ul>
-        </nav>
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" placeholder="Search titles...">
-        </div>
-      </div>
+  <div class="loading-screen">
+    <div class="loader">
+      <div class="loader-circle"></div>
+      <div class="loader-text">VORTEX</div>
     </div>
+  </div>
+
+  <header>
+    <nav>
+      <div class="nav-left">
+        <div class="logo-container">
+          <div class="logo-glow"></div>
+          <h1 class="logo">VORTEX</h1>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="choose.html" class="nav-link active">Entertainment</a></li>
+          <li><a href="g.html" class="nav-link">Games</a></li>
+          <li><a href="form.html" class="nav-link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <div class="time-display" id="time">--:--</div>
+        <div class="search-container">
+          <i class="fa-solid fa-search search-icon"></i>
+          <input type="text" id="search" placeholder="Search titles...">
+        </div>
+        <button id="settings-btn" class="icon-btn"><i class="fa-solid fa-gear"></i></button>
+      </div>
+    </nav>
   </header>
 
   <div class="container">
@@ -385,348 +544,32 @@
       <p class="subheading">Explore thousands of movies and TV shows</p>
       
       <div class="category-selector">
-        <button class="category-btn active" onclick="showCategory('shows')">TV Shows</button>
-        <button class="category-btn" onclick="showCategory('movies')">Movies</button>
+        <button class="category-btn active" data-category="shows">TV Shows</button>
+        <button class="category-btn" data-category="movies">Movies</button>
       </div>
     </div>
 
     <div id="shows" class="media-list active">
       <h2 class="section-title">Popular TV Shows</h2>
-      <div class="media-grid">
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" class="poster" alt="Stranger Things">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Stranger_Things_logo.png/640px-Stranger_Things_logo.png" class="logo" alt="Stranger Things Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Stranger Things</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>9.2/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Horror</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500673922987-e212871fec22" class="poster" alt="Breaking Bad">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Breaking_Bad_logo.svg/320px-Breaking_Bad_logo.svg.png" class="logo" alt="Breaking Bad Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Breaking Bad</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>9.5/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Crime</span>
-              <span class="tag">Drama</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb" class="poster" alt="The Mandalorian">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/The_Mandalorian_logo.png/320px-The_Mandalorian_logo.png" class="logo" alt="The Mandalorian Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">The Mandalorian</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.8/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Action</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" class="poster" alt="The Last of Us">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/The_Last_of_Us_logo.svg/320px-The_Last_of_Us_logo.svg.png" class="logo" alt="The Last of Us Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">The Last of Us</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.9/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Drama</span>
-              <span class="tag">Post-Apocalyptic</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" class="poster" alt="Loki">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Loki_logo.png/320px-Loki_logo.png" class="logo" alt="Loki Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Loki</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.7/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Fantasy</span>
-              <span class="tag">Adventure</span>
-            </div>
-          </div>
-        </div>
+      <div class="media-grid" id="popular-shows">
+        <!-- TV Shows will be loaded from JSON -->
       </div>
 
       <h2 class="section-title">Trending Shows</h2>
-      <div class="media-grid">
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb" class="poster" alt="Game of Thrones">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Game_of_Thrones_2011_logo.svg/320px-Game_of_Thrones_2011_logo.svg.png" class="logo" alt="Game of Thrones Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Game of Thrones</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>9.2/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Fantasy</span>
-              <span class="tag">Drama</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500673922987-e212871fec22" class="poster" alt="The Crown">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/The_Crown_logo.svg/320px-The_Crown_logo.svg.png" class="logo" alt="The Crown Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">The Crown</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.6/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Biography</span>
-              <span class="tag">History</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" class="poster" alt="The Witcher">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/The_Witcher_TV_series-Logo.png/320px-The_Witcher_TV_series-Logo.png" class="logo" alt="The Witcher Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">The Witcher</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.1/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Fantasy</span>
-              <span class="tag">Adventure</span>
-            </div>
-          </div>
-        </div>
+      <div class="media-grid" id="trending-shows">
+        <!-- Trending shows will be loaded from JSON -->
       </div>
     </div>
 
     <div id="movies" class="media-list">
       <h2 class="section-title">Top Movies</h2>
-      <div class="media-grid">
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" class="poster" alt="Inception">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Inception_logo.svg/320px-Inception_logo.svg.png" class="logo" alt="Inception Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Inception</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.8/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Action</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb" class="poster" alt="Interstellar">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Interstellar_film_logo.svg/320px-Interstellar_film_logo.svg.png" class="logo" alt="Interstellar Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Interstellar</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.7/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Adventure</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500673922987-e212871fec22" class="poster" alt="The Matrix">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/The_Matrix_logo.svg/320px-The_Matrix_logo.svg.png" class="logo" alt="The Matrix Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">The Matrix</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.7/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Action</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" class="poster" alt="Dune">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Dune_2021_logo.svg/320px-Dune_2021_logo.svg.png" class="logo" alt="Dune Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Dune</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.0/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Adventure</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" class="poster" alt="Blade Runner 2049">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Blade_Runner_2049_logo.png/320px-Blade_Runner_2049_logo.png" class="logo" alt="Blade Runner Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Blade Runner 2049</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.0/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Sci-Fi</span>
-              <span class="tag">Drama</span>
-            </div>
-          </div>
-        </div>
+      <div class="media-grid" id="top-movies">
+        <!-- Movies will be loaded from JSON -->
       </div>
 
       <h2 class="section-title">Popular Movies</h2>
-      <div class="media-grid">
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" class="poster" alt="The Dark Knight">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Dark_Knight_%28film%29_Logo.svg/320px-The_Dark_Knight_%28film%29_Logo.svg.png" class="logo" alt="The Dark Knight Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">The Dark Knight</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>9.0/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Action</span>
-              <span class="tag">Crime</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb" class="poster" alt="Pulp Fiction">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Pulp_Fiction_%281994%29_logo.svg/320px-Pulp_Fiction_%281994%29_logo.svg.png" class="logo" alt="Pulp Fiction Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Pulp Fiction</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.9/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Crime</span>
-              <span class="tag">Drama</span>
-            </div>
-          </div>
-        </div>
-        <div class="media-card">
-          <img src="https://images.unsplash.com/photo-1500673922987-e212871fec22" class="poster" alt="Fight Club">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Fight_Club_logo.svg/320px-Fight_Club_logo.svg.png" class="logo" alt="Fight Club Logo">
-          <div class="play-btn">
-            <i class="fas fa-play"></i>
-          </div>
-          <div class="media-info">
-            <div>
-              <h3 class="media-title">Fight Club</h3>
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <span>8.8/10</span>
-              </div>
-            </div>
-            <div class="tags">
-              <span class="tag">Drama</span>
-              <span class="tag">Thriller</span>
-            </div>
-          </div>
-        </div>
+      <div class="media-grid" id="popular-movies">
+        <!-- Popular movies will be loaded from JSON -->
       </div>
     </div>
   </div>
@@ -738,24 +581,263 @@
   </footer>
 
   <script>
-    function showCategory(categoryId) {
-      // Hide all categories
-      const lists = document.querySelectorAll('.media-list');
-      lists.forEach(list => list.classList.remove('active'));
-      
-      // Show selected category
-      document.getElementById(categoryId).classList.add('active');
-      
-      // Update button states
-      const buttons = document.querySelectorAll('.category-btn');
-      buttons.forEach(button => button.classList.remove('active'));
-      
-      // Find the clicked button and set it as active
-      const clickedButton = Array.from(buttons).find(
-        button => button.onclick.toString().includes(`'${categoryId}'`)
-      );
-      if (clickedButton) clickedButton.classList.add('active');
+    // Time display function
+    function updateTime() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('time').textContent = `${hours}:${minutes}`;
     }
+    
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Loading screen
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        const loadingScreen = document.querySelector('.loading-screen');
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+        }, 500);
+      }, 800);
+    });
+
+    // Category switching
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Hide all lists
+        const lists = document.querySelectorAll('.media-list');
+        lists.forEach(list => list.classList.remove('active'));
+        
+        // Show the selected category
+        const categoryId = button.dataset.category;
+        document.getElementById(categoryId).classList.add('active');
+      });
+    });
+
+    // Load entertainment data from JSON
+    async function loadEntertainmentData() {
+      try {
+        const response = await fetch('assets/lists/entertainment.json');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        renderContent(data);
+      } catch (error) {
+        console.error('Error loading entertainment data:', error);
+        // Fallback to sample data if JSON loading fails
+        loadSampleData();
+      }
+    }
+
+    function renderContent(data) {
+      if (data.shows && data.shows.popular) {
+        renderMediaCards(data.shows.popular, 'popular-shows');
+      }
+      
+      if (data.shows && data.shows.trending) {
+        renderMediaCards(data.shows.trending, 'trending-shows');
+      }
+      
+      if (data.movies && data.movies.top) {
+        renderMediaCards(data.movies.top, 'top-movies');
+      }
+      
+      if (data.movies && data.movies.popular) {
+        renderMediaCards(data.movies.popular, 'popular-movies');
+      }
+    }
+
+    function renderMediaCards(items, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'media-card';
+        
+        card.innerHTML = `
+          <img src="${item.posterUrl}" class="poster" alt="${item.title}">
+          ${item.logoUrl ? `<img src="${item.logoUrl}" class="logo" alt="${item.title} Logo">` : ''}
+          <div class="play-btn">
+            <i class="fas fa-play"></i>
+          </div>
+          <div class="media-info">
+            <div>
+              <h3 class="media-title">${item.title}</h3>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <span>${item.rating}/10</span>
+              </div>
+            </div>
+            <div class="tags">
+              ${item.genres.map(genre => `<span class="tag">${genre}</span>`).join('')}
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+
+    function loadSampleData() {
+      const sampleData = {
+        shows: {
+          popular: [
+            {
+              title: "Stranger Things",
+              posterUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Stranger_Things_logo.png/640px-Stranger_Things_logo.png",
+              rating: "9.2",
+              genres: ["Sci-Fi", "Horror"]
+            },
+            {
+              title: "Breaking Bad",
+              posterUrl: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Breaking_Bad_logo.svg/320px-Breaking_Bad_logo.svg.png",
+              rating: "9.5",
+              genres: ["Crime", "Drama"]
+            },
+            {
+              title: "The Mandalorian",
+              posterUrl: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/The_Mandalorian_logo.png/320px-The_Mandalorian_logo.png",
+              rating: "8.8",
+              genres: ["Sci-Fi", "Action"]
+            },
+            {
+              title: "The Last of Us",
+              posterUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/The_Last_of_Us_logo.svg/320px-The_Last_of_Us_logo.svg.png",
+              rating: "8.9",
+              genres: ["Drama", "Post-Apocalyptic"]
+            },
+            {
+              title: "Loki",
+              posterUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Loki_logo.png/320px-Loki_logo.png",
+              rating: "8.7",
+              genres: ["Fantasy", "Adventure"]
+            }
+          ],
+          trending: [
+            {
+              title: "Game of Thrones",
+              posterUrl: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Game_of_Thrones_2011_logo.svg/320px-Game_of_Thrones_2011_logo.svg.png",
+              rating: "9.2",
+              genres: ["Fantasy", "Drama"]
+            },
+            {
+              title: "The Crown",
+              posterUrl: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/The_Crown_logo.svg/320px-The_Crown_logo.svg.png",
+              rating: "8.6",
+              genres: ["Biography", "History"]
+            },
+            {
+              title: "The Witcher",
+              posterUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/The_Witcher_TV_series-Logo.png/320px-The_Witcher_TV_series-Logo.png",
+              rating: "8.1",
+              genres: ["Fantasy", "Adventure"]
+            }
+          ]
+        },
+        movies: {
+          top: [
+            {
+              title: "Inception",
+              posterUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Inception_logo.svg/320px-Inception_logo.svg.png",
+              rating: "8.8",
+              genres: ["Sci-Fi", "Action"]
+            },
+            {
+              title: "Interstellar",
+              posterUrl: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Interstellar_film_logo.svg/320px-Interstellar_film_logo.svg.png",
+              rating: "8.7",
+              genres: ["Sci-Fi", "Adventure"]
+            },
+            {
+              title: "The Matrix",
+              posterUrl: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/The_Matrix_logo.svg/320px-The_Matrix_logo.svg.png",
+              rating: "8.7",
+              genres: ["Sci-Fi", "Action"]
+            },
+            {
+              title: "Dune",
+              posterUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Dune_2021_logo.svg/320px-Dune_2021_logo.svg.png",
+              rating: "8.0",
+              genres: ["Sci-Fi", "Adventure"]
+            },
+            {
+              title: "Blade Runner 2049",
+              posterUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Blade_Runner_2049_logo.png/320px-Blade_Runner_2049_logo.png",
+              rating: "8.0",
+              genres: ["Sci-Fi", "Drama"]
+            }
+          ],
+          popular: [
+            {
+              title: "The Dark Knight",
+              posterUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Dark_Knight_%28film%29_Logo.svg/320px-The_Dark_Knight_%28film%29_Logo.svg.png",
+              rating: "9.0",
+              genres: ["Action", "Crime"]
+            },
+            {
+              title: "Pulp Fiction",
+              posterUrl: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Pulp_Fiction_%281994%29_logo.svg/320px-Pulp_Fiction_%281994%29_logo.svg.png",
+              rating: "8.9",
+              genres: ["Crime", "Drama"]
+            },
+            {
+              title: "Fight Club",
+              posterUrl: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+              logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Fight_Club_logo.svg/320px-Fight_Club_logo.svg.png",
+              rating: "8.8",
+              genres: ["Drama", "Thriller"]
+            }
+          ]
+        }
+      };
+      
+      renderContent(sampleData);
+    }
+
+    // Search functionality
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      const allCards = document.querySelectorAll('.media-card');
+      
+      allCards.forEach(card => {
+        const title = card.querySelector('.media-title').textContent.toLowerCase();
+        const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+        
+        if (searchTerm === '' || title.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm))) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+
+    // Initialize
+    loadEntertainmentData();
   </script>
 
 </body>
