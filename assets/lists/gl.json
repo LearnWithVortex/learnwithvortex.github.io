@@ -189,5 +189,15 @@
                                                             "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png",
                                                             "featured": false,
                                                             "rating": 4.5                                                        
+                                                        },
+                                                        {
+                                                            "name": "Minecraft",
+                                                            "id": "MC",
+                                                            "discription": "-",
+                                                            "category": "Action",
+                                                            "path": "https://s.mcraft.fun",
+                                                            "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png",
+                                                            "featured": true,
+                                                            "rating": 4.5                                                        
                                                         }
                                                       ]
