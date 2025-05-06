@@ -583,7 +583,11 @@ function setupGamePopout(game) {
         // Create and style iframe
         const iframe = popup.document.createElement("iframe");
         // Use the current game's path
-        iframe.src = window.location.origin + game.path;
+        if (game.name == "Minecraft") {
+          iframe.src = game.path
+        } else {
+        iframe.src = window.location.origin + game.path
+        }
         Object.assign(iframe.style, {
           position: "fixed",
           top: "0",
