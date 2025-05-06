@@ -582,6 +582,19 @@ function setupGamePopout(game) {
 
         // Create and style iframe
         const iframe = popup.document.createElement("iframe");
+        iframe.sandbox = [
+  "allow-scripts",
+  "allow-forms",
+  "allow-same-origin",
+  "allow-popups",
+  "allow-downloads",
+  "allow-modals",
+  "allow-presentation",
+  "allow-top-navigation",
+  "allow-top-navigation-by-user-activation",
+  "allow-popups-to-escape-sandbox",
+  "allow-fullscreen"
+].join(" ");
         // Use the current game's path
         if (game.name == "Minecraft") {
           iframe.src = game.path
