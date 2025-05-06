@@ -718,7 +718,7 @@ function setupCarousel() {
 
   featuredGames.forEach((game, index) => {
     const maxLength = 120;
-    const fullDesc = game.discription || `Experience the excitement of ${game.name}. One of our most popular ${game.category} games!`;
+    const fullDesc = game.description || `Experience the excitement of ${game.name}. One of our most popular ${game.category} games!`;
     const isLong = fullDesc.length > maxLength;
     const shortDesc = fullDesc.slice(0, maxLength) + (isLong ? '...' : '');
 
