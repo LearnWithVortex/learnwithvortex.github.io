@@ -40,7 +40,6 @@ let carouselIndex = 0;
 let featuredGames = [];
 let showAllRecent = false;
 let currentView = 'all';
-
 // Add new variable for carousel interval
 let carouselInterval = null;
 // Add a new variable to track if a popout window is already open
