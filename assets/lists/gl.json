@@ -198,5 +198,48 @@
     "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png",
     "featured": true,
     "rating": 4.5
+  },
+    {
+    "name": "Cookie Clicker",
+    "id": "CC",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "idle games",
+    "path": "g/Cookie-Clicker/",
+    "logo": "/g/Cookie-Clicker/IMG_1709.jpeg",
+    "featured": false,
+    "rating": 3.0
+  },
+   {
+    "name": "Core Ball",
+    "id": "CB",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "Puzzles",
+    "path": "/g/Coreball/",
+    "logo": "/g/Coreball/IMG_4632.jpeg",
+    "featured": false,
+    "rating": 3.0
+  },
+
+     {
+    "name": "Doge Miner",
+    "id": "DM",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "idle games",
+    "path": "/g/Doge-Miner/",
+    "logo": "/g/Doge-Miner/IMG_2926.jpeg",
+    "featured": false,
+    "rating": 1.5
+  },
+       {
+    "name": "CSGO Clicker",
+    "id": "CSGO",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "idle games",
+    "path": "/g/CSGO-Clicker/",
+    "logo": "/g/CSGO-Clicker/IMG_2921.jpeg",
+    "featured": false,
+    "rating": 1.0
   }
+
+  
 ]
