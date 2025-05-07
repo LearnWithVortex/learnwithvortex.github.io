@@ -598,8 +598,7 @@ function setupGamePopout(game) {
   "allow-presentation",
   "allow-top-navigation",
   "allow-top-navigation-by-user-activation",
-  "allow-popups-to-escape-sandbox",
-  "allow-fullscreen"
+  "allow-popups-to-escape-sandbox"
 ].join(" ");
         // Use the current game's path
         if (game.name == "Minecraft") {
