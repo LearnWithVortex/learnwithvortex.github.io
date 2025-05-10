@@ -195,7 +195,7 @@
     "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
     "category": "Action",
     "path": "https://s.mcraft.fun",
-    "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png",
+    "logo": "/assets/images/IMG_2929.jpeg",
     "featured": true,
     "rating": 4.5
   },
@@ -239,7 +239,27 @@
     "logo": "/g/CSGO-Clicker/IMG_2921.jpeg",
     "featured": false,
     "rating": 1.0
+  },
+        {
+    "name": "Among Us",
+    "id": "AU",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "action",
+    "path": "/g/Among-Us/",
+    "logo": "/g/Among-Us/image.png",
+    "featured": false,
+    "rating": 2.5
+  },
+  
+        {
+    "name": "Drift Boss",
+    "id": "DB",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "vroom vroom",
+    "path": "/g/Driftboss/",
+    "logo": "/g/Driftboss/drift-boss.png",
+    "featured": false,
+    "rating": 2.5
   }
-
   
 ]
