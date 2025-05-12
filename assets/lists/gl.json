@@ -270,6 +270,29 @@
     "logo": "/g/Edgesurf/splash.png",
     "featured": false,
     "rating": 2.5
+  },
+      {
+    "name": "EuroCup",
+    "id": "EC",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "Action",
+    "path": "/g/EuroCup/",
+    "logo": "/g/EuroCup/android-icon-192x192.png",
+    "featured": false,
+    "rating": 4.5
+  },
+  
+      {
+    "name": "FactoryBallz",
+    "id": "fbs",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "Action",
+    "path": "/g/FactryBallsForever/",
+    "logo": "/g/FactoryBallsForever/IMG_2930.jpeg",
+    "featured": false,
+    "rating": 4.5
   }
 
+g/FactoryBallsForever/IMG_2930.jpeg
+  
 ]
