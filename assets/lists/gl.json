@@ -251,7 +251,7 @@
     "rating": 2.5
   },
   
-        {
+  {
     "name": "Drift Boss",
     "id": "DB",
     "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
@@ -260,6 +260,16 @@
     "logo": "/g/Driftboss/drift-boss.png",
     "featured": false,
     "rating": 2.5
+  },
+    {
+    "name": "Edge Surf",
+    "id": "ES",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "Action",
+    "path": "/g/Edgesurf",
+    "logo": "/g/Edgesurf/splash.png",
+    "featured": false,
+    "rating": 2.5
   }
-  
+
 ]
