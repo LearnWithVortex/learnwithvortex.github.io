@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,26 +7,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --accent: #00ffff;
-      --background: #0e0e0e;
-      --card-bg: rgba(255, 255, 255, 0.05);
+      --accent: #00eaff;
+      --accent-hover: #33f0ff;
+      --background: #0b0f1c;
+      --card-bg: rgba(26, 37, 64, 0.5);
       --border: rgba(255, 255, 255, 0.1);
+      --error: rgba(255, 0, 0, 0.85);
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
+      font-family: "Rajdhani", "Segoe UI", sans-serif;
     }
 
     body {
       height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: linear-gradient(135deg, #0b0f1c, #1a2540);
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
+      color: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 10% 30%, rgba(93, 52, 242, 0.1), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(0, 234, 255, 0.1), transparent 40%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     .signup-container {
@@ -34,92 +55,286 @@
       padding: 2.5rem;
       border-radius: 16px;
       border: 1px solid var(--border);
-      box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 234, 255, 0.15);
       width: 100%;
       max-width: 400px;
       text-align: center;
+      position: relative;
+      z-index: 1;
       animation: fadeIn 0.8s ease-out;
     }
 
     .signup-container h2 {
       margin-bottom: 1.5rem;
       font-size: 1.8rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
     }
 
     .signup-container input {
       width: 100%;
       padding: 12px 14px;
-      margin-bottom: 1rem;
       border-radius: 10px;
-      border: none;
-      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border);
+      background-color: rgba(255, 255, 255, 0.05);
       color: white;
       font-size: 1rem;
-      transition: background 0.3s;
+      transition: all 0.3s;
     }
 
     .signup-container input:focus {
-      background-color: rgba(255, 255, 255, 0.2);
-      outline: 2px solid var(--accent);
+      background-color: rgba(255, 255, 255, 0.1);
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0, 234, 255, 0.2);
     }
 
     .signup-container button {
       width: 100%;
       padding: 12px;
-      background-color: var(--accent);
+      margin-top: 0.5rem;
+      background: linear-gradient(135deg, #00eaff, #5d34f2);
       border: none;
       border-radius: 10px;
       font-size: 1rem;
       font-weight: bold;
-      color: #000;
+      color: #fff;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .signup-container button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.7s;
     }
 
     .signup-container button:hover {
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 234, 255, 0.3);
+    }
+
+    .signup-container button:hover::before {
+      left: 100%;
     }
 
     .toast {
       position: fixed;
       top: 30px;
       right: 30px;
-      background: rgba(255, 0, 0, 0.85);
+      background: var(--error);
       color: white;
       padding: 1rem 1.5rem;
       border-radius: 10px;
-      box-shadow: 0 0 15px red;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
       z-index: 1000;
       opacity: 0;
       animation: slideIn 0.3s ease forwards;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast i {
+      font-size: 1.2rem;
+    }
+
+    .toast-message {
+      flex-grow: 1;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .toast-close:hover {
+      opacity: 1;
+    }
+
+    .login-link {
+      margin-top: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      display: block;
+    }
+
+    .login-link a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .login-link a:hover {
+      text-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+    }
+
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 26, 46, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      z-index: 2;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 4px solid transparent;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 5;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background-color: rgba(0, 234, 255, 0.3);
+    }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+  <a href="/" class="back-button">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+
+  <div class="particles" id="particles"></div>
+
   <div class="signup-container">
     <h2>Create your Vortex account</h2>
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
-    <button id="signup-btn">Sign Up</button>
+    
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" autocomplete="email" />
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Create a secure password" autocomplete="new-password" />
+    </div>
+    
+    <button id="signup-btn" class="ripple">Sign Up</button>
+    
+    <span class="login-link">
+      Already have an account? <a href="index.html">Sign In</a>
+    </span>
+    
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="loader"></div>
+    </div>
   </div>
 
-  <div id="toast" class="toast" style="display:none;"></div>
+  <div id="toast" class="toast" style="display:none;">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span id="toast-message" class="toast-message"></span>
+    <button class="toast-close" id="toast-close">
+      <i class="fa-solid fa-times"></i>
+    </button>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
 
   <script>
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCTKdR30MEYIJ-iGj8iHMleQJAjvXy-GQg",
       authDomain: "adroit-solstice-427414-s8.firebaseapp.com",
@@ -131,24 +346,141 @@
       measurementId: "G-GKMT3HDLFB"
     };
 
+    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
 
-    function showErrorToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.display = 'block';
-      toast.style.animation = 'slideIn 0.3s ease forwards';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 4000);
+    // Create animated background particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const numberOfParticles = 50;
+      
+      for (let i = 0; i < numberOfParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random position
+        const posX = Math.random() * window.innerWidth;
+        const posY = Math.random() * window.innerHeight;
+        
+        // Random opacity and size
+        const opacity = Math.random() * 0.5 + 0.1;
+        const size = Math.random() * 3 + 1;
+        
+        particle.style.left = `${posX}px`;
+        particle.style.top = `${posY}px`;
+        particle.style.opacity = opacity;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Add animation with random duration
+        const duration = Math.random() * 20 + 10;
+        particle.style.animation = `float ${duration}s infinite ease-in-out`;
+        
+        // Add keyframe animation dynamically
+        const keyframes = `
+          @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px); }
+          }
+        `;
+        
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = keyframes;
+        document.head.appendChild(styleSheet);
+        
+        particlesContainer.appendChild(particle);
+      }
     }
 
-    function signup() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    // Show loading overlay
+    function showLoading() {
+      document.getElementById('loading-overlay').classList.add('active');
+    }
+    
+    // Hide loading overlay
+    function hideLoading() {
+      document.getElementById('loading-overlay').classList.remove('active');
+    }
 
+    // Show toast notification
+    function showErrorToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      
+      toastMessage.textContent = message;
+      toast.style.display = 'flex';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 5000);
+    }
+
+    // Close toast on click
+    document.getElementById('toast-close').addEventListener('click', () => {
+      document.getElementById('toast').style.display = 'none';
+    });
+
+    // Add ripple effect to buttons
+    document.getElementById('signup-btn').addEventListener('click', function(e) {
+      const button = e.currentTarget;
+      const ripple = document.createElement('span');
+      
+      const rect = button.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      ripple.style.position = 'absolute';
+      ripple.style.width = '10px';
+      ripple.style.height = '10px';
+      ripple.style.borderRadius = '50%';
+      ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+      ripple.style.transform = 'scale(0)';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.style.animation = 'ripple 0.6s linear';
+      
+      button.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+      
+      signup();
+    });
+
+    // Signup function
+    function signup() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      // Form validation
+      if (!email) {
+        showErrorToast('Please enter an email address.');
+        return;
+      }
+      
+      if (!password) {
+        showErrorToast('Please enter a password.');
+        return;
+      }
+      
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showErrorToast('Please enter a valid email address.');
+        return;
+      }
+      
+      // Password strength validation
+      if (password.length < 6) {
+        showErrorToast('Password must be at least 6 characters long.');
+        return;
+      }
+      
+      showLoading();
+      
       auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           const user = userCredential.user;
@@ -157,23 +489,40 @@
 
           db.ref("users/" + uid).set({
             email: user.email,
-            joined: timestamp
+            joined: timestamp,
+            lastLogin: timestamp
+          })
+          .then(() => {
+            hideLoading();
+            window.location.href = "/index.html";
+          })
+          .catch(error => {
+            hideLoading();
+            showErrorToast("Error creating user profile: " + error.message);
           });
-
-          window.location.href = "/index.html";
         })
         .catch(error => {
+          hideLoading();
           showErrorToast(error.message);
         });
     }
 
+    // Check if user is already logged in
     auth.onAuthStateChanged(user => {
       if (user) {
         window.location.href = "/index.html";
       }
     });
 
-    document.getElementById('signup-btn').addEventListener('click', signup);
+    // Handle enter key press
+    document.getElementById('password').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        signup();
+      }
+    });
+
+    // Create the background particles
+    window.onload = createParticles;
   </script>
 </body>
 </html>
