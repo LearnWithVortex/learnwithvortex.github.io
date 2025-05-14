@@ -311,6 +311,25 @@
     "logo": "/g/IdleBreakout/img/thumbnail.png",
     "featured": false,
     "rating": 3.0
+  },
+    {
+    "name": "Monkey Mart",
+    "id": "MM",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "Idle",
+    "path": "/g/Monkey-mart/",
+    "logo": "/g/Monkey-mart/MonkeyMart.jpeg",
+    "featured": false,
+    "rating": 1.5
+  },
+     {
+    "name": "OvO",
+    "id": "OO",
+    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
+    "category": "Action",
+    "path": "/g/OVO/",
+    "logo": "/g/OVO/IMG_1710.jpeg",
+    "featured": false,
+    "rating": 4.5
   }
-  
 ]
