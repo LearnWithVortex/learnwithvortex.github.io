@@ -271,7 +271,7 @@
         };
 
         try {
-          const res = await fetch('https://chat-app-62tw.onrender.com/', {
+          const res = await fetch('https://chat-app-62tw.onrender.com/webhook', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
