@@ -1,8 +1,8 @@
 import { stateManager } from './state.js';
 import { domElements, domUtils } from './dom.js';
-import { gameManager } from './manager.js';
+import { gameManager } from './game.js';
 import { uiRenderer } from './ui.js';
-import { carouselManager } from './carousel-manager.js';
+import { carouselManager } from './manager.js';
 
 export const eventHandlers = {
   setupAllEventListeners() {
