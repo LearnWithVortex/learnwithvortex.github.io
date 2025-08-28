@@ -1,9 +1,9 @@
 import { CONFIG, LOCAL_STORAGE_KEYS } from './config.js';
 import { stateManager } from './state.js';
 import { domElements, domUtils } from './dom.js';
-import { gameManager } from './manager.js';
+import { gameManager } from './game.js';
 import { uiRenderer } from './ui.js';
-import { carouselManager } from './carousel-manager.js';
+import { carouselManager } from './manager.js';
 import { eventHandlers } from './event.js';
 
 export const appInitializer = {
