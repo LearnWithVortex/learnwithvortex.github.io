@@ -1,7 +1,7 @@
-import { stateManager } from './state-manager.js';
-import { domElements, domUtils } from './dom-elements.js';
-import { gameManager } from './game-manager.js';
-import { uiRenderer } from './ui-renderer.js';
+import { stateManager } from './state.js';
+import { domElements, domUtils } from './dom.js';
+import { gameManager } from './manager.js';
+import { uiRenderer } from './ui.js';
 import { carouselManager } from './carousel-manager.js';
 
 export const eventHandlers = {
