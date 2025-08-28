@@ -1,6 +1,6 @@
-import { stateManager } from './state-manager.js';
-import { domElements, domUtils } from './dom-elements.js';
-import { uiRenderer } from './ui-renderer.js';
+import { stateManager } from './state.js';
+import { domElements, domUtils } from './dom.js';
+import { uiRenderer } from './ui.js';
 import { CONFIG, ANIMATION_DELAYS } from './config.js';
 
 export const carouselManager = {
