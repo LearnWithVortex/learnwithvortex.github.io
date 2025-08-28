@@ -1,6 +1,6 @@
 import { stateManager } from './state.js';
 import { domElements, domUtils } from './dom.js';
-import { gameManager } from './manager.js';
+import { gameManager } from './game.js';
 import { ANIMATION_DELAYS, CONFIG } from './config.js';
 
 export const uiRenderer = {
