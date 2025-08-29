@@ -1,5 +1,5 @@
 // Auto-bump cache name using build timestamp
-const CACHE_NAME = "vortex-cache-v1.0";
+const CACHE_NAME = "vortex-cache-v1.1.1";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
