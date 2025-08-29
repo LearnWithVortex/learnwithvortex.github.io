@@ -1,6 +1,6 @@
-import { stateManager } from './state.js';
-import { domElements, domUtils } from './dom.js';
-import { gameManager } from './game.js';
+import { stateManager } from './state-manager.js';
+import { domElements, domUtils } from './dom-elements.js';
+import { gameManager } from './game-manager.js';
 import { ANIMATION_DELAYS, CONFIG } from './config.js';
 
 export const uiRenderer = {
@@ -284,12 +284,17 @@ export const uiRenderer = {
   },
 
   showLoadingScreen() {
-    const loadingScreen = domElements.get('LOADING_SCREEN');
+    const loadingScreen = document.querySelector('.loading-screen');
+    
+    if (!loadingScreen) {
+      console.warn('Loading screen element not found');
+      return;
+    }
     
     setTimeout(() => {
       loadingScreen.style.opacity = '0';
       setTimeout(() => {
-        domUtils.addClass(loadingScreen, 'hidden');
+        loadingScreen.classList.add('hidden');
       }, ANIMATION_DELAYS.LOADING_FADE);
     }, CONFIG.LOADING_SCREEN_DELAY);
   },
