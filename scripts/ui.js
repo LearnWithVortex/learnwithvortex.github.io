@@ -284,7 +284,7 @@ export const uiRenderer = {
   },
 
   showLoadingScreen() {
-    const loadingScreen = domElements.get('loading_screen');
+    const loadingScreen = domElements.get('LOADING_SCREEN');
     
     setTimeout(() => {
       loadingScreen.style.opacity = '0';
