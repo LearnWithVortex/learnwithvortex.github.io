@@ -1,6 +1,7 @@
 import { stateManager } from './state.js';
 import { domElements, domUtils } from './dom.js';
 import { ANIMATION_DELAYS } from './config.js';
+import { carouselManager } from './manager.js';
 
 export const gameManager = {
   async loadGames() {
@@ -19,7 +20,7 @@ export const gameManager = {
   playGame(game, index = null) {
     const gameIndex = index !== null ? index : stateManager.findGameIndex(game.id);
     stateManager.set('currentGameIndex', gameIndex);
-
+    carouselManager.stopAutoRotation()
     const gameOverlay = domElements.get('GAME_OVERLAY');
     const gameFrame = domElements.get('GAME_FRAME');
     const currentGameTitle = domElements.get('CURRENT_GAME_TITLE');
@@ -56,7 +57,7 @@ export const gameManager = {
   closeGame() {
     const gameOverlay = domElements.get('GAME_OVERLAY');
     const gameFrame = domElements.get('GAME_FRAME');
-
+    carouselManager.startAutoRotation()
     domUtils.addClass(gameOverlay, 'closing');
     setTimeout(() => {
       domUtils.removeClass(gameOverlay, 'active');
