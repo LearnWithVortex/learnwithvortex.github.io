@@ -6,13 +6,9 @@ export const gameManager = {
   async loadGames() {
     try {
       const response = await fetch('/assets/lists/gl.json');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const games = await response.json();
       stateManager.setGames(games);
-      
       return games;
     } catch (error) {
       console.error('Error loading games:', error);
@@ -23,41 +19,36 @@ export const gameManager = {
   playGame(game, index = null) {
     const gameIndex = index !== null ? index : stateManager.findGameIndex(game.id);
     stateManager.set('currentGameIndex', gameIndex);
-    
+
     const gameOverlay = domElements.get('GAME_OVERLAY');
     const gameFrame = domElements.get('GAME_FRAME');
     const currentGameTitle = domElements.get('CURRENT_GAME_TITLE');
     const gameCategory = domElements.get('GAME_CATEGORY');
     const fullscreenGame = domElements.get('FULLSCREEN_GAME');
-    
-    // Preload animation
+
     domUtils.addClass(gameOverlay, 'preload');
-    
-    setTimeout(() => {
+
+    requestAnimationFrame(() => {
       gameFrame.src = game.path;
-      domUtils.setText(currentGameTitle, game.name);
-      domUtils.setText(gameCategory, game.category);
+      currentGameTitle.textContent = game.name;
+      gameCategory.textContent = game.category;
       this.updateFavoriteButton(game.id);
-      
+
       domUtils.removeClass(gameOverlay, 'preload');
       domUtils.addClass(gameOverlay, 'active');
-      
-      // Reset fullscreen button
-      domUtils.setHTML(fullscreenGame, '<i class="fa-solid fa-expand"></i>');
-      
-      // Animate game rating
+
+      fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
+
       this.animateGameRating(game.rating);
-    }, ANIMATION_DELAYS.TRANSITION);
-    
-    // Save to recently played and setup popout
+    });
+
     stateManager.addToRecentlyPlayed(game.id);
     this.setupGamePopout(game);
   },
 
   playRandomGame() {
     const games = stateManager.get('games');
-    if (games.length === 0) return;
-    
+    if (!games.length) return;
     const randomIndex = Math.floor(Math.random() * games.length);
     this.playGame(games[randomIndex], randomIndex);
   },
@@ -65,9 +56,8 @@ export const gameManager = {
   closeGame() {
     const gameOverlay = domElements.get('GAME_OVERLAY');
     const gameFrame = domElements.get('GAME_FRAME');
-    
+
     domUtils.addClass(gameOverlay, 'closing');
-    
     setTimeout(() => {
       domUtils.removeClass(gameOverlay, 'active');
       domUtils.removeClass(gameOverlay, 'closing');
@@ -76,127 +66,75 @@ export const gameManager = {
   },
 
   toggleFavoriteCurrentGame() {
-    const currentGameIndex = stateManager.get('currentGameIndex');
-    const games = stateManager.get('games');
-    const currentGame = games[currentGameIndex];
-    
+    const currentGame = stateManager.get('games')[stateManager.get('currentGameIndex')];
     if (!currentGame) return;
-    
-    const isNowFavorite = stateManager.toggleFavorite(currentGame.id);
+    if (stateManager.toggleFavorite(currentGame.id)) domUtils.addFloatingHeart();
     this.updateFavoriteButton(currentGame.id);
-    
-    // Add heart animation if favorited
-    if (isNowFavorite) {
-      domUtils.addFloatingHeart();
-    }
   },
 
   updateFavoriteButton(gameId) {
     const favoriteGame = domElements.get('FAVORITE_GAME');
-    const favorites = stateManager.get('favorites');
-    const isFavorite = favorites.includes(gameId);
-    
-    domUtils.setHTML(favoriteGame, `<i class="fa-${isFavorite ? 'solid' : 'regular'} fa-heart"></i>`);
+    const isFavorite = stateManager.get('favorites').includes(gameId);
+    favoriteGame.innerHTML = `<i class="fa-${isFavorite ? 'solid' : 'regular'} fa-heart"></i>`;
   },
 
   toggleFullscreen() {
     const gameFrame = domElements.get('GAME_FRAME');
     const fullscreenGame = domElements.get('FULLSCREEN_GAME');
-    
+
     if (!document.fullscreenElement) {
       this.enterFullscreen(gameFrame);
-      domUtils.setHTML(fullscreenGame, '<i class="fa-solid fa-compress"></i>');
+      fullscreenGame.innerHTML = '<i class="fa-solid fa-compress"></i>';
     } else {
       this.exitFullscreen();
-      domUtils.setHTML(fullscreenGame, '<i class="fa-solid fa-expand"></i>');
+      fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
     }
-    
+
     domUtils.addPulseAnimation(fullscreenGame, ANIMATION_DELAYS.TRANSITION);
   },
 
   enterFullscreen(element) {
-    if (element.requestFullscreen) {
-      element.requestFullscreen().catch(err => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
-      });
-    } else if (element.webkitRequestFullscreen) { /* Safari */
-      element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) { /* IE11 */
-      element.msRequestFullscreen();
-    }
+    element.requestFullscreen?.().catch(err => console.error(err));
   },
 
   exitFullscreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { /* Safari */
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE11 */
-      document.msExitFullscreen();
-    }
+    document.exitFullscreen?.();
   },
 
   setupGamePopout(game) {
-    const gamePopout = domElements.get('GAME_POPOUT');
-    
-    // Remove existing event listener
-    const newGamePopout = gamePopout.cloneNode(true);
-    gamePopout.parentNode.replaceChild(newGamePopout, gamePopout);
-    
-    // Update DOM elements cache
+    const popout = domElements.get('GAME_POPOUT');
+    popout.replaceWith(popout.cloneNode(true));
     domElements.cache();
-    
-    newGamePopout.addEventListener('click', () => {
-      this.openGamePopout(game);
-    });
+    domElements.get('GAME_POPOUT').addEventListener('click', () => this.openGamePopout(game));
   },
 
   openGamePopout(game) {
-    // Close existing popout
     const activePopout = stateManager.get('activePopoutWindow');
-    if (activePopout && !activePopout.closed) {
-      try {
-        activePopout.close();
-      } catch (e) {
-        console.log("Could not close previous popup:", e);
-      }
-    }
+    if (activePopout?.closed === false) activePopout.close();
 
-    // Check if already in iframe or Firefox
     let inFrame;
-    try {
-      inFrame = window !== top;
-    } catch (e) {
-      inFrame = true;
-    }
+    try { inFrame = window !== top; } catch { inFrame = true; }
+    if (navigator.userAgent.includes("Firefox") || inFrame) return;
 
-    if (!navigator.userAgent.includes("Firefox") && !inFrame) {
-      const popup = window.open("about:blank", "_blank");
+    const popup = window.open("about:blank", "_blank");
+    if (!popup || popup.closed) return console.log("Popup blocked");
 
-      if (!popup || popup.closed) {
-        console.log("Popup was blocked");
-        return;
-      }
-
-      stateManager.set('activePopoutWindow', popup);
-      this.setupPopupWindow(popup, game);
-      this.closeGame();
-    }
+    stateManager.set('activePopoutWindow', popup);
+    this.setupPopupWindow(popup, game);
+    this.closeGame();
   },
 
   setupPopupWindow(popup, game) {
-    // Set title and favicon
     popup.document.title = `Google Docs`;
     const link = popup.document.createElement("link");
     link.rel = "icon";
     link.href = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png";
     popup.document.head.appendChild(link);
 
-    // Create iframe
     const iframe = popup.document.createElement("iframe");
     iframe.sandbox = [
       "allow-scripts",
-      "allow-forms", 
+      "allow-forms",
       "allow-same-origin",
       "allow-popups",
       "allow-downloads",
@@ -208,43 +146,23 @@ export const gameManager = {
     ].join(" ");
 
     iframe.src = game.name === "Minecraft" ? game.path : window.location.origin + game.path;
-    
-    Object.assign(iframe.style, {
-      position: "fixed",
-      top: "0",
-      left: "0", 
-      width: "100%",
-      height: "100%",
-      margin: "0",
-      padding: "0",
-      border: "none",
-      outline: "none",
-      zIndex: "9999"
-    });
-
-    popup.document.body.style.margin = "0";
+    Object.assign(iframe.style, { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", border: "none", margin: 0, padding: 0, outline: "none", zIndex: 9999 });
+    popup.document.body.style.margin = 0;
     popup.document.body.appendChild(iframe);
 
-    // Track popup close
     popup.addEventListener('unload', () => {
-      if (stateManager.get('activePopoutWindow') === popup) {
-        stateManager.set('activePopoutWindow', null);
-      }
+      if (stateManager.get('activePopoutWindow') === popup) stateManager.set('activePopoutWindow', null);
     });
   },
 
   animateGameRating(rating) {
     const stars = document.querySelectorAll('.game-rating i');
     stars.forEach((star, i) => {
-      setTimeout(() => {
-        if (i < Math.floor(rating)) {
-          star.className = 'fa-solid fa-star';
-        } else if (i < rating) {
-          star.className = 'fa-solid fa-star-half-stroke';
-        } else {
-          star.className = 'fa-regular fa-star';
-        }
-      }, i * ANIMATION_DELAYS.STAR_RATING);
+      requestAnimationFrame(() => {
+        if (i < Math.floor(rating)) star.className = 'fa-solid fa-star';
+        else if (i < rating) star.className = 'fa-solid fa-star-half-stroke';
+        else star.className = 'fa-regular fa-star';
+      });
     });
   }
 };
