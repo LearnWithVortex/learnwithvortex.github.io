@@ -88,7 +88,6 @@ export const gameManager = {
       fullscreenGame.innerHTML = '<i class="fa-solid fa-compress"></i>';
     } else {
       this.exitFullscreen();
-      fullscreenGame.innerHTML = '<i class="fa-solid fa-expand"></i>';
     }
 
     domUtils.addPulseAnimation(fullscreenGame, ANIMATION_DELAYS.TRANSITION);
